@@ -1,5 +1,6 @@
 .title-group{
-  margin-bottom: 6px;
+  margin-top: 40px;
+  margin-bottom: 11px;
   color: var(--clr-primary-dark-3);
   display: flex;
   gap: 10px;
@@ -15,7 +16,7 @@
 section.sm,section.lg{
   .card{
     display: grid;
-    --_offset : 16px;
+    --_offset : 5px;
     grid-template-columns: [background-start] var(--_offset) [game-image-start] auto [background-end] var(--_offset) [game-image-end];
     grid-template-rows: 
     [game-image-start]
@@ -31,14 +32,6 @@ section.sm,section.lg{
     border-radius: 20px;
     padding-bottom: 12px;
     row-gap: 6px;
-
-    
-    > .card-background{
-      background-color: var(--clr-secondary);
-      border-radius: 20px;
-
-      grid-area: background;
-    }
   }
 
   .card a{
@@ -92,7 +85,6 @@ section.sm,section.lg{
       width: 195px;
       aspect-ratio: 3/2;
       object-fit: cover;
-      border: 5px solid var(--clr-secondary-dark-2);
     }
 
     > .game-name{
@@ -105,8 +97,6 @@ section.sm,section.lg{
       padding: 6px;
 
     }
-
-    
   }
 
 }

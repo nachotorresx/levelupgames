@@ -1,9 +1,16 @@
-@import url("./root.css");
-@import url("./badge.css");
-@import url("./card.css");
-@import url("./button.css");
-@import url("./carousel.css");
-@import url("./footer.css");
+@import url(root.css);
+@import url(header.css);
+@import url(form.css);
+@import url(badge.css);
+@import url(card.css);
+@import url(button.css);
+@import url(avatar.css);
+@import url(footer.css);
+@import url(toggle-menu.css);
+@import url(comment.css);
+@import url(game-container.css);
+@import url(carousel.css);
+@import url(loader.css);
 
 
 .stack {
@@ -40,6 +47,7 @@ picture,
 svg {
   max-width: 100%;
   display: block;
+  color: var(--clr-white);
 }
 
 img {
@@ -56,6 +64,8 @@ img {
 input {
   border-style: none;
 }
+
+
 
 @media (prefers-reduced-motion: reduce) {
   html:focus-within {
@@ -79,8 +89,7 @@ input {
 
 .content-grid,
 .full-width {
-
-
+  
   --_padding-inline: 50px;
   --_content-max-width: 1300px;
 
@@ -99,7 +108,7 @@ input {
 
 
 body {
-  background-color: var(--clr-secondary);
+  background-color: var(--clr-primary);
 
   font-family: var(--ff);
 
@@ -113,6 +122,7 @@ body {
   grid-template-rows: [header-start] auto [header-end main-start] 1fr [main-end footer-start] auto [footer-end];
 
   > main > .wrapper{
+    margin-bottom: 40px;
     overflow: hidden;
   }
 }
@@ -123,6 +133,7 @@ h3,
 h4,
 h5 {
   text-wrap: balance;
+  color: var(--clr-white);
 }
 
 h5 {
@@ -178,3 +189,4 @@ p {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--clr-secondary-dark-3);
 }
+

@@ -54,11 +54,11 @@
 }
 
 .btn.primary {
-  --_background: var(--clr-primary);
-  --_background-hover: var(--clr-primary-light-1);
-  --_background-active: var(--clr-primary-dark-1);
+  --_background: var(--clr-accent);
+  --_background-hover: var(--clr-accent-shadow-1);
+  --_background-active: var(--clr-accent-shadow-2);
   --_text: var(--clr-white);
-  --_stroke: var(--clr-primary-dark-3);
+  --_stroke: var(--clr-accent-shadow-1);
   font-weight: var(--fw-bold);
 }
 

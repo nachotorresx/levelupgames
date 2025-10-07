@@ -21,14 +21,18 @@
   --clr-secondary-dark-3: #0A1116;
 
   --clr-accent: #1475E1;
+  --clr-accent-shadow-1: #0F5BB4;
+  --clr-accent-shadow-2: #0A4186;
+  --clr-accent-light-1: #3B8DE7;
   --clr-accent-light-2: #62A6ED;
+  --clr-accent-light-3: #A0CBF5;
 
 
 
   --clr-black: #000000;
   --clr-white: #FFFFFF;
 
-  --clr-grey: #b1b1b1;
+  --clr-grey: #333333;
 
   --clr-discount: #FF5252;
 
