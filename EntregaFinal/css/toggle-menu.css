@@ -1,0 +1,74 @@
+details.menu {
+  z-index: 1;
+  position: relative;
+  width: 30px;
+}
+
+/* Cuando el details está abierto */
+details.menu[open] summary svg:first-of-type {
+  display: none;
+}
+
+details.menu[open] summary svg:last-of-type {
+  display: block;
+}
+
+/* Estilos del summary */
+details.menu > summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+details.menu > summary svg {
+  color: var(--clr-primary-light-3);
+}
+
+details.menu > summary:hover {
+  filter: brightness(.8);
+  color: var(--clr-primary);
+}
+
+details.menu > summary > svg:last-of-type {
+  display: none;
+}
+
+/* Estilos del ul */
+details.menu > ul {
+  position: absolute;
+  top: 150%;
+  overflow: hidden;
+  border-radius: 10px;
+  background-color: var(--clr-accent);
+  width: 200px;
+}
+
+/* Alineación a la izquierda */
+details.menu > ul.left {
+  left: 0;
+  border-top-left-radius: 0;
+}
+
+/* Alineación a la derecha */
+details.menu > ul.right {
+  right: 0;
+  border-top-right-radius: 0;
+}
+
+/* Estilos de los items */
+details.menu > ul > li > * {
+  cursor: pointer;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background-color: var(--clr-accent);
+  color: var(--clr-white);
+  transition: gap .3s ease-out, background-color .3s ease-out;
+  text-decoration: none;
+}
+
+details.menu > ul > li > *:hover {
+  gap: 20px;
+  background-color: var(--clr-accent-shadow-1);
+}

@@ -1,0 +1,53 @@
+.comment-group{
+  display: grid;
+  gap: 50px;
+  height: fit-content;
+}
+
+
+.comment{
+  display: grid;
+  height: fit-content;
+
+  width: fit-content;
+  column-gap: 10px;
+
+  grid-template-columns: [avatar-start] auto [avatar-end data-start name-start] auto [name-end rate-start] auto [rate-end] auto [data-end];
+  grid-template-rows: 
+  [user-info-start]
+  auto
+  [user-info-end content-start]
+  auto
+  [content-end]
+  ;
+
+  > img{
+    width: 60px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: 1.5px solid var(--clr-secondary-dark-3);
+    grid-column: avatar;
+    grid-row: user-info-start/content-end;
+    object-fit: cover;
+  }
+
+  > .rate{
+    grid-column: rate;
+    grid-row: user-info;
+    display: flex;
+    gap: 2px;
+  }
+
+  > .name{
+    grid-column: name;
+    grid-row: user-info;
+  }
+
+  > .content{
+    grid-column: data;
+    grid-row: content;
+  }
+
+  
+
+}

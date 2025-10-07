@@ -1,0 +1,90 @@
+main {
+  background-color: var(--clr-primary);
+}
+
+main>.wrapper {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: var(--clr-secondary);
+  width: 485px;
+  height: 700px;
+  justify-self: center;
+
+  display: grid;
+  justify-items: center;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  border-radius: 13px;
+
+  gap: 18px;
+  
+  box-shadow: 0 4px 6px #0003;
+
+
+  .logo {
+    color: var(--clr-white);
+    display: grid;
+    justify-items: center;
+    gap: 6px;
+
+    svg {
+      width: 74px;
+      height: auto;
+    }
+  }
+
+  .other-methods {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+
+    .btn {
+      width: 46px;
+    }
+
+    .facebook {
+      --_background: #007AFF;
+      --_background-hover: #005ab9;
+      --_background-active: #00346b;
+      --_text: var(--clr-white);
+      --_stroke: #2E2A99;
+    }
+
+    .google {
+      --_background: var(--clr-white);
+      --_background-hover: #eee;
+      --_background-active: var(--clr-grey);
+      --_text: var(--clr-white);
+      --_stroke: var(--clr-grey);
+    }
+  }
+
+  form>a {
+    margin-top: 10px;
+    color: var(--clr-white);
+    font-size: var(--fs-body);
+    text-decoration: none;
+    text-align: center;
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+  .fake-inputs {
+    display: flex;
+    gap: 10px;
+
+    span {
+      color: var(--clr-white);
+      display: flex;
+      align-items: center;
+      background-color: var(--clr-white);
+      border: 1px solid var(--clr-grey);
+      gap: 10px;
+      padding: 10px;
+      border-radius: 12px;
+      font-size: var(--fs-min);
+    }
+  }
+}

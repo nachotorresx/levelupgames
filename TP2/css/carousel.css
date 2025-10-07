@@ -1,0 +1,86 @@
+.carousel{
+  position: relative;
+  display: grid;
+  align-items: center;
+
+
+  * > *:not(.arrow){
+    transition: scale .2s;
+    z-index: 0;
+  }
+
+  > .carousel-items{
+    display: flex;
+    gap: 40px;
+    overflow: hidden;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    transition: scale .3s;
+
+    > *{
+      transition: transform .3s, scale .3s, rotate .3s;
+    }
+
+    &::-webkit-scrollbar{
+      height: 0;
+    }
+  }
+}
+
+.carousel .arrow {
+  position: absolute;
+  border: none;
+  z-index: 1;
+  height: 100%;
+  background-color: var(--clr-primary-dark-1);
+  color: var(--clr-white);
+  padding-inline: 10px;
+  border-radius: 40px;
+  cursor: pointer;
+
+  z-index: 1;
+
+  box-shadow: 0 0 10px #000;
+
+  &.none{
+    display: none;
+  }
+
+  &:hover{
+    background-color: var(--clr-primary-light-1);
+  }
+
+  &.left {
+    left: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+  
+  &.right {
+    right: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+}
+
+
+
+.carousel-items.carousel-items.scale-effect{
+  scale: 0.95;
+  filter: blur(1px);
+}
+
+.carousel-items.scale-effect * {
+  scale: .9 1;
+}
+
+.carousel-items.skew-right *{
+  transform: skew(8deg);
+  rotate: -2deg;
+}
+.carousel-items.skew-left *{
+  transform: skew(-8deg);
+  rotate: 2deg;
+}
+

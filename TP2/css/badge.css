@@ -1,0 +1,70 @@
+.price-cart-container{
+  grid-column: game-image-start/background-end;
+  grid-row: price-cart;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 10px;
+  padding-right: 10px;
+
+  > span.price{
+    cursor: default;
+  }
+}
+
+.add-to-cart{
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border: 2px solid var(--clr-green);
+  border-radius: 10px;
+  padding: 4px 8px;
+  color: var(--clr-green);
+  cursor: pointer;
+
+  &:hover,&:focus-visible{
+    filter: brightness(1.2);
+  }
+
+  > input[type="checkbox"]{
+    display: none;
+    visibility: none;
+  }
+
+  > .plus{
+    display: block;
+  }
+
+  > .check{
+    display: none;
+  }
+
+  &:has(input:checked){
+    background-color: var(--clr-green);
+    color: var(--clr-white);
+
+    > .cart{
+      animation: jump .3s cubic-bezier(.0,-5,1,5);
+    }
+    
+    > .plus{
+      display: none;
+    }
+    
+    > .check{
+      display: block;
+    }
+  }
+}
+
+@keyframes jump {
+  50%{
+    translate: 0 -2px;
+    rotate: -10deg;
+  }
+
+  100%{
+    translate: 0;
+    rotate: 10deg;
+  }
+}

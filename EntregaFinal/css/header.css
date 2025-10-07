@@ -1,0 +1,86 @@
+body > header {
+  position: sticky;
+  background-color: var(--clr-secondary);
+  z-index: 9;
+  transition: box-shadow .3s ease-out;
+}
+
+body > header .mobile {
+  display: none;
+}
+body > header .desktop {
+  color: var(--clr-primary-light-3);
+}
+
+body > header.active {
+  top: var(--_top);
+}
+
+body > header.clr {
+  box-shadow: 0 10px 12px #0002;
+}
+
+body > header > .wrapper {
+  display: flex;
+  align-items: center;
+  padding-block: 25px;
+}
+
+body > header > .wrapper > :is(:first-child, :last-child) {
+  flex-grow: 1;
+  flex-basis: 0;
+}
+
+body > header > .wrapper > :last-child {
+  justify-content: end;
+}
+
+body > header > .wrapper .aside {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+}
+
+/* 📱 Responsive - Mobile */
+@media screen and (width < 800px) {
+  body > header > .wrapper .mobile {
+    display: block;
+  }
+
+  body > header > .wrapper .desktop {
+    display: none;
+  }
+
+  body > header > .wrapper .aside {
+    gap: 15px;
+  }
+
+  body > header > .wrapper > [role="searchbox"] {
+    display: none;
+  }
+
+  body > header > .wrapper .buscar.mobile {
+    color: var(--clr-primary-light-3);
+    background-color: transparent;
+    border: none;
+  }
+
+  body > header > .wrapper #buscar-mobile {
+    z-index: 9;
+    background-color: transparent;
+    border: none;
+    position: fixed;
+    inset: 0;
+    left: 50%;
+    top: 20px;
+    translate: -50%;
+  }
+
+  body > header > .wrapper #buscar-mobile form {
+    width: 80vw;
+  }
+
+  body > header > .wrapper #buscar-mobile::backdrop {
+    background-color: #0008;
+  }
+}

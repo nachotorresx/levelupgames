@@ -1,0 +1,168 @@
+/* --- Label tipo texto (inputs) --- */
+label[role="group"].text {
+  display: grid;
+  gap: 4px;
+  color: var(--clr-secondary-dark-3);
+  max-width: 240px;
+}
+
+/* Campo requerido */
+label[role="group"].text:has(> [required]) p::after {
+  content: '*';
+  color: var(--clr-discount);
+  margin-inline: 4px;
+}
+
+/* Input dentro del label de texto */
+label[role="group"].text input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 12px;
+  background-color: var(--clr-white);
+  border: 1px solid var(--clr-grey);
+  font-size: var(--fs-min);
+  color: var(--clr-black);
+}
+
+label[role="group"].text input::placeholder {
+  color: var(--clr-primary-light-2);
+  font-size: var(--fs-min);
+}
+
+label[role="group"].text input:focus-visible {
+  outline: none;
+  background-color: var(--clr-grey);
+}
+
+/* --- Checkbox --- */
+label[role="group"].checkbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+label[role="group"].checkbox input {
+  display: none;
+}
+
+label[role="group"].checkbox p {
+  font-size: var(--fs-min);
+  align-items: center;
+}
+
+label[role="group"].checkbox .box {
+  box-sizing: border-box;
+  aspect-ratio: 1;
+  width: 20px;
+  background-color: var(--clr-white);
+  border: 2px solid var(--clr-white);
+  border-radius: 4px;
+}
+
+/* Cuando el checkbox está checked */
+label[role="group"].checkbox:has(input:checked) .box {
+  background-color: var(--clr-green);
+}
+
+/* --- Searchbox & Form --- */
+[role="searchbox"],
+[role="form"] {
+  width: 450px;
+}
+
+[role="searchbox"] input[type="text"],
+[role="form"] input[type="text"],
+[role="form"] input[type="email"],
+[role="form"] input[type="password"] {
+  background-color: var(--clr-secondary-light-1);
+  width: 100%;
+  height: 33px;
+  padding: 12px;
+  padding-right: calc(12px + 22px);
+  caret-color: var(--clr-secondary-light-2);
+  color: var(--clr-black);
+  border-radius: 15px;
+}
+
+[role="searchbox"] input[type="text"]:focus-visible,
+[role="form"] input[type="text"]:focus-visible,
+[role="form"] input[type="email"]:focus-visible,
+[role="form"] input[type="password"]:focus-visible {
+  outline: none;
+  background-color: var(--clr-primary);
+}
+
+[role="searchbox"] input[type="text"]:focus-visible + button svg,
+[role="form"] input[type="text"]:focus-visible + button svg {
+  color: var(--clr-primary);
+  animation: shake 0.35s ease-in;
+  animation-iteration-count: 2;
+  animation-delay: 0.1s;
+}
+
+[role="searchbox"] input[type="text"]::placeholder,
+[role="form"] input[type="text"]::placeholder,
+[role="form"] input[type="email"]::placeholder,
+[role="form"] input[type="password"]::placeholder {
+  color: var(--clr-primary-light-3);
+  font-weight: var(--fw-bold);
+}
+
+/* Botones dentro de searchbox o form */
+[role="searchbox"] button,
+[role="form"] button {
+  border: none;
+  background-color: transparent;
+  justify-self: end;
+  width: fit-content;
+  margin-right: 10px;
+}
+
+[role="searchbox"] button:hover,
+[role="form"] button:hover,
+[role="searchbox"] button:focus,
+[role="form"] button:focus {
+  background-color: var(--clr-primary-light);
+  outline: none;
+}
+
+[role="searchbox"] button:hover svg,
+[role="form"] button:hover svg,
+[role="searchbox"] button:focus svg,
+[role="form"] button:focus svg {
+  color: var(--clr-primary);
+  animation: shake 0.35s ease-in;
+  animation-iteration-count: 2;
+  animation-delay: 0.1s;
+}
+
+/* Íconos SVG */
+[role="searchbox"] svg,
+[role="form"] svg {
+  color: var(--clr-primary-light-3);
+  transform-origin: bottom right;
+}
+
+/* --- Animación shake --- */
+@keyframes shake {
+  0%, 75%, 100% {
+    rotate: 0deg;
+  }
+  25% {
+    rotate: 10deg;
+  }
+}
+
+/* --- Formulario general --- */
+form.form {
+  display: grid;
+  width: 250px;
+  gap: 18px;
+}
+
+/* --- Texto general --- */
+p {
+  color: var(--clr-white);
+}

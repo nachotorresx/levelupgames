@@ -1,0 +1,139 @@
+label[role="group"].text {
+  display: grid;
+  gap: 4px;
+  color: var(--clr-secondary-dark-3);
+  max-width: 240px;
+
+  &:has(> [required]) p::after {
+    content: '*';
+    color: var(--clr-primary);
+    margin-inline: 4px;
+  }
+
+  input{
+    width: 100%;
+    padding: 10px;
+    border-radius: 12px;
+    background-color: var(--clr-white);
+    border: 1px solid var(--clr-grey);
+    font-size: var(--fs-min);
+    color: var(--clr-black);
+
+    &::placeholder {
+      color: var(--clr-secondary-dark-1);
+      font-size: var(--fs-min);
+    }
+
+    &:focus-visible {
+      outline: none;
+      background-color: var(--clr-grey);
+    }
+  }
+}
+
+label[role="group"].checkbox{
+
+  display: flex;
+  gap: 8px;
+  cursor: pointer;
+
+  input{
+    display: none;
+  }
+
+  p{
+    font-size: var(--fs-min);
+  }
+
+  .box{
+    box-sizing: border-box;
+    aspect-ratio: 1;
+    width: 20px;
+    background-color: var(--clr-black);
+    border: 2px solid var(--clr-black);
+    border-radius: 4px;
+  }
+
+  &:has(input:checked) .box{
+    background-color: var(--clr-accent);
+  }
+}
+
+[role="searchbox"],
+[role="form"] {
+  width: 450px;
+
+  input[type="text"] {
+    background-color: var(--clr-secondary-light-1);
+    width: 100%;
+    padding: 12px;
+    padding-right: calc(12px + 22px);
+    caret-color: var(--clr-primary);
+    color: var(--clr-black);
+    border-radius: 15px;
+
+    &:focus-visible {
+      outline: none;
+      background-color: var(--clr-secondary);
+
+      + button svg{
+
+        color: var(--clr-primary);
+        animation: shake .35s ease-in;
+        animation-iteration-count: 2;
+        animation-delay: .1s;
+
+      }
+    }
+
+    &::placeholder {
+      color: var(--clr-secondary-dark-3);
+    }
+  }
+
+  button {
+    border: none;
+    background-color: transparent;
+    justify-self: end;
+    width: fit-content;
+    margin-right: 10px;
+
+    &:hover,
+    &:focus {
+      background-color: var(--clr-primary-light);
+      outline: none;
+
+      & svg {
+        color: var(--clr-primary);
+        animation: shake .35s ease-in;
+        animation-iteration-count: 2;
+        animation-delay: .1s;
+      }
+    }
+  }
+
+  svg {
+    color: var(--clr-primary-dark-3);
+    transform-origin: bottom right;
+  }
+
+
+}
+
+@keyframes shake {
+
+  0%,
+  75%,
+  100% {
+    rotate: 0deg;
+  }
+
+  25% {
+    rotate: 10deg;
+  }
+}
+
+form.form{
+  display: grid;
+  gap: 18px;
+}
