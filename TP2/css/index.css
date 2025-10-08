@@ -17,10 +17,10 @@
   display: grid;
   grid-template-areas: "stack";
   align-items: center;
+}
 
-  >* {
-    grid-area: stack;
-  }
+.stack > * {
+  grid-area: stack;
 }
 
 
@@ -66,7 +66,6 @@ input {
 }
 
 
-
 @media (prefers-reduced-motion: reduce) {
   html:focus-within {
     scroll-behavior: auto;
@@ -82,14 +81,15 @@ input {
   }
 }
 
+
 ::selection {
   background-color: var(--clr-primary);
   color: var(--clr-white);
 }
 
+
 .content-grid,
 .full-width {
-  
   --_padding-inline: 50px;
   --_content-max-width: 1300px;
 
@@ -98,34 +98,38 @@ input {
 
   display: grid;
   grid-template-columns:
-    [full-width-start] var(--full-width-size) [content-start] var(--content-size) [content-end] var(--full-width-size) [full-width-end];
+    [full-width-start] var(--full-width-size)
+    [content-start] var(--content-size)
+    [content-end] var(--full-width-size)
+    [full-width-end];
 }
 
-.content-grid>*,
-.full-width>* {
+.content-grid > *,
+.full-width > * {
   grid-column: content;
 }
 
 
 body {
   background-color: var(--clr-primary);
-
   font-family: var(--ff);
-
   font-size: var(--fs-body);
   color: var(--clr-black);
   min-height: 100vh;
   min-height: 100dvh;
 
-
   display: grid;
-  grid-template-rows: [header-start] auto [header-end main-start] 1fr [main-end footer-start] auto [footer-end];
-
-  > main > .wrapper{
-    margin-bottom: 40px;
-    overflow: hidden;
-  }
+  grid-template-rows:
+    [header-start] auto
+    [header-end main-start] 1fr
+    [main-end footer-start] auto
+    [footer-end];
 }
+
+body > main > .wrapper {
+  overflow: hidden;
+}
+
 
 h1,
 h2,
@@ -161,6 +165,7 @@ h1 {
   font-size: var(--fs-h1);
 }
 
+
 p,
 li {
   text-wrap: pretty;
@@ -173,6 +178,7 @@ p {
 .bold {
   font-weight: var(--fw-bold);
 }
+
 
 ::-webkit-scrollbar {
   width: 10px;
@@ -189,4 +195,3 @@ p {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--clr-secondary-dark-3);
 }
-

@@ -4,7 +4,7 @@ details.menu {
   width: 30px;
 }
 
-/* Cuando el details está abierto */
+
 details.menu[open] summary svg:first-of-type {
   display: none;
 }
@@ -13,7 +13,7 @@ details.menu[open] summary svg:last-of-type {
   display: block;
 }
 
-/* Estilos del summary */
+
 details.menu > summary {
   list-style: none;
   cursor: pointer;
@@ -32,7 +32,7 @@ details.menu > summary > svg:last-of-type {
   display: none;
 }
 
-/* Estilos del ul */
+
 details.menu > ul {
   position: absolute;
   top: 150%;
@@ -42,19 +42,19 @@ details.menu > ul {
   width: 200px;
 }
 
-/* Alineación a la izquierda */
+
 details.menu > ul.left {
   left: 0;
   border-top-left-radius: 0;
 }
 
-/* Alineación a la derecha */
+
 details.menu > ul.right {
   right: 0;
   border-top-right-radius: 0;
 }
 
-/* Estilos de los items */
+
 details.menu > ul > li > * {
   cursor: pointer;
   width: 100%;

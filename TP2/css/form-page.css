@@ -3,11 +3,12 @@ main {
 }
 
 main>.wrapper {
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin-top: 20px;
+  margin-bottom: 20px;
   background-color: var(--clr-secondary);
   width: 485px;
-  height: 700px;
+  min-height: 100%;
+  height: fit-content;
   justify-self: center;
 
   display: grid;

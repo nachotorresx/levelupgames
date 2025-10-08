@@ -27,18 +27,22 @@
   margin-top: 20px;
   font-family: var(--ff2);
   font-size: 3rem;
-  font-weight: 700;
+  font-weight: 700px;
   color: var(--clr-white);
   opacity: 0;
   animation: revealText 2s ease-in-out forwards;
   text-transform: uppercase;
 }
 
-/* barra*/
+.loading-logo {
+  animation: revealText 2s ease-in-out forwards;
+}
+
+
 .loading-bar {
   position: relative;
   width: 220px;
-  height: 4px;
+  height: 10px;
   margin: 25px auto 0;
   background-color: rgba(255, 255, 255, 0.15);
   border-radius: 4px;
@@ -52,14 +56,16 @@
   top: 0;
   height: 100%;
   width: 0%;
-  background: linear-gradient(90deg, #0F5BB4, #0A4186, #15242A);
+  background: linear-gradient(90deg, var(--clr-accent), var(--clr-accent-shadow-1), var(--clr-accent-shadow-2));
   border-radius: 4px;
   animation: fillBar 5s ease forwards;
 }
+
 #percent {
   margin-top: 10px;
   font-family: var(--ff);
 }
+
 @keyframes revealText {
   0% { opacity: 0; transform: translateY(20px); }
   50% { opacity: 1; transform: translateY(0); }

@@ -1,4 +1,4 @@
-.title-group{
+.title-group {
   margin-top: 40px;
   margin-bottom: 11px;
   color: var(--clr-primary-dark-3);
@@ -6,27 +6,21 @@
   gap: 10px;
   align-items: center;
 
-  & ~ *:is(.title-group){
+  &~*:is(.title-group) {
     margin-top: 40px;
   }
 }
 
 
 
-section.sm,section.lg{
-  .card{
+section.sm,
+section.lg {
+  .card {
     display: grid;
-    --_offset : 5px;
+    --_offset: 5px;
     grid-template-columns: [background-start] var(--_offset) [game-image-start] auto [background-end] var(--_offset) [game-image-end];
-    grid-template-rows: 
-    [game-image-start]
-    var(--_offset)
-    [background-start]
-    auto
-    [game-image-end price-cart-start]
-    auto
-    [price-cart-end background-end]
-    ;
+    grid-template-rows:
+      [game-image-start] var(--_offset) [background-start] auto [game-image-end price-cart-start] auto [price-cart-end background-end];
 
 
     border-radius: 20px;
@@ -34,7 +28,7 @@ section.sm,section.lg{
     row-gap: 6px;
   }
 
-  .card a{
+  .card a {
     display: grid;
     grid-area: game-image;
     transition: translate .3s;
@@ -42,7 +36,8 @@ section.sm,section.lg{
 
 
 
-  .card, .card a{
+  .card,
+  .card a {
     text-decoration: none;
     position: relative;
     width: 195px;
@@ -50,26 +45,27 @@ section.sm,section.lg{
     aspect-ratio: 3/2;
 
 
-    &:hover, &:focus-visible{
+    &:hover,
+    &:focus-visible {
 
       outline-color: var(--clr-accent);
 
-      .black{
+      .black {
         opacity: 1;
       }
-      
-      .game-name{
+
+      .game-name {
         opacity: 1;
         translate: 0;
       }
 
-      > a{
+      >a {
         translate: calc(var(--_offset) * -1);
       }
 
     }
 
-    > .black{
+    >.black {
       background-color: rgba(0, 0, 0, 80%);
       border-radius: 20px;
       opacity: 0;
@@ -79,7 +75,7 @@ section.sm,section.lg{
       z-index: 0;
     }
 
-    > img{
+    >img {
       border-radius: 20px;
       overflow: hidden;
       width: 195px;
@@ -87,7 +83,7 @@ section.sm,section.lg{
       object-fit: cover;
     }
 
-    > .game-name{
+    >.game-name {
       color: var(--clr-white);
       font-weight: var(--fw-bold);
       text-wrap: wrap;
@@ -101,25 +97,26 @@ section.sm,section.lg{
 
 }
 
-section.lg{
-  
-  + *{
+section.lg {
+
+  +* {
     margin-top: 36px;
   }
 
-  .card, .card a{
+  .card,
+  .card a {
     width: 450px;
 
-    > img{
+    >img {
       width: 450px;
     }
 
-    > .black{
+    >.black {
       width: 450px;
       height: 300px;
     }
   }
 
-  
+
 
 }

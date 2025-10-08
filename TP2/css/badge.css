@@ -1,4 +1,4 @@
-.name-cart-container{
+.name-cart-container {
   grid-column: game-image-start/background-end;
   grid-row: price-cart;
   display: flex;
@@ -6,14 +6,14 @@
   justify-content: space-between;
   padding-bottom: 10px;
   padding-right: 10px;
-
-  > span.price{
-    cursor: default;
-    color: var(--clr-white);
-  }
 }
 
-.play-button{
+.name-cart-container > span.price {
+  cursor: default;
+  color: var(--clr-white);
+}
+
+.play-button {
   width: 61px;
   height: 25px;
   background-color: #1475E1;
@@ -24,36 +24,37 @@
   gap: 4px;
   border: 1px solid var(--clr-white);
   border-radius: 10px;
-
   color: var(--clr-white);
   cursor: pointer;
+}
 
-  &:hover,&:focus-visible{
-    filter: brightness(1.2);
-  }
+.play-button:hover,
+.play-button:focus-visible {
+  filter: brightness(1.2);
+}
 
-  > input[type="checkbox"]{
-    display: none;
-    visibility: none;
-  }
+.play-button > input[type="checkbox"] {
+  display: none;
+  visibility: hidden;
+}
 
-  > .plus{
-    display: block;
-  }
+.play-button > .plus {
+  display: block;
+}
 
-  > .check{
-    display: none;
-  }
-  > a {
-    color: var(--clr-white);
-    text-decoration: none;
-    width: 100%;
-    height: 100%;
-    display: flex;              /* centra el texto */
-    justify-content: center;    /* horizontal */
-    align-items: center;        /* vertical */
-    border-radius: 10px;        /* mantiene bordes */
-  }
+.play-button > .check {
+  display: none;
+}
+
+.play-button > a {
+  color: var(--clr-white);
+  text-decoration: none;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
 }
 
 .add-button {
@@ -69,82 +70,88 @@
   color: var(--clr-white);
   cursor: pointer;
   transition: background 0.3s ease;
-
-  > input[type="checkbox"] {
-    display: none;
-  }
-  .price {
-    font-size: small;
-  }
-
-  > .price,
-  > .cart-plus,
-  > .cart-check,
-  > .cart-remove {
-    display: none;
-  }
-
-  > .price {
-    display: block;
-  }
-
-  &:hover,
-  &:focus-visible {
-    filter: brightness(1.1);
-
-    > .price {
-      display: none;
-    }
-
-    > .cart-plus {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-  }
-
-  &:has(input:checked) {
-    background-color: var(--clr-green);
-
-    > .price,
-    > .cart-plus,
-    > .cart-remove {
-      display: none;
-    }
-    > .cart-check {
-      display: block;
-    }
-
-    > .cart-plus svg:last-child {
-      display: none;
-    }
-
-    > .cart-plus {
-      display: flex;
-      justify-content: center;
-    }
-  }
-  &:has(input:checked):hover {
-    background-color: red;
-
-    > .cart-check {
-      display: none;
-    }
-
-    > .cart-remove {
-      display: block;
-    }
-  }
 }
 
+.add-button > input[type="checkbox"] {
+  display: none;
+}
+
+.add-button .price {
+  font-size: small;
+}
+
+.add-button > .price,
+.add-button > .cart-plus,
+.add-button > .cart-check,
+.add-button > .cart-remove {
+  display: none;
+}
+
+.add-button > .price {
+  display: block;
+}
+
+.add-button:hover,
+.add-button:focus-visible {
+  filter: brightness(1.1);
+}
+
+.add-button:hover > .price,
+.add-button:focus-visible > .price {
+  display: none;
+}
+
+.add-button:hover > .cart-plus,
+.add-button:focus-visible > .cart-plus {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Estado cuando el input está checked */
+.add-button:has(input:checked) {
+  background-color: var(--clr-green);
+}
+
+.add-button:has(input:checked) > .price,
+.add-button:has(input:checked) > .cart-plus,
+.add-button:has(input:checked) > .cart-remove {
+  display: none;
+}
+
+.add-button:has(input:checked) > .cart-check {
+  display: block;
+}
+
+.add-button:has(input:checked) > .cart-plus svg:last-child {
+  display: none;
+}
+
+.add-button:has(input:checked) > .cart-plus {
+  display: flex;
+  justify-content: center;
+}
+
+/* Estado hover cuando está checked */
+.add-button:has(input:checked):hover {
+  background-color: red;
+}
+
+.add-button:has(input:checked):hover > .cart-check {
+  display: none;
+}
+
+.add-button:has(input:checked):hover > .cart-remove {
+  display: block;
+}
 
 @keyframes jump {
-  50%{
+  50% {
     translate: 0 -2px;
     rotate: -10deg;
   }
 
-  100%{
+  100% {
     translate: 0;
     rotate: 10deg;
   }

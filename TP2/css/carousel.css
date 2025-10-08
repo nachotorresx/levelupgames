@@ -1,30 +1,29 @@
-.carousel{
+.carousel {
   position: relative;
   display: grid;
   align-items: center;
+}
 
+.carousel * > *:not(.arrow) {
+  transition: scale .2s;
+  z-index: 0;
+}
 
-  * > *:not(.arrow){
-    transition: scale .2s;
-    z-index: 0;
-  }
+.carousel > .carousel-items {
+  display: flex;
+  gap: 40px;
+  overflow: hidden;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  transition: scale .3s;
+}
 
-  > .carousel-items{
-    display: flex;
-    gap: 40px;
-    overflow: hidden;
-    overflow-x: auto;
-    scroll-behavior: smooth;
-    transition: scale .3s;
+.carousel > .carousel-items > * {
+  transition: transform .3s, scale .3s, rotate .3s;
+}
 
-    > *{
-      transition: transform .3s, scale .3s, rotate .3s;
-    }
-
-    &::-webkit-scrollbar{
-      height: 0;
-    }
-  }
+.carousel > .carousel-items::-webkit-scrollbar {
+  height: 0;
 }
 
 .carousel .arrow {
@@ -37,36 +36,30 @@
   padding-inline: 10px;
   border-radius: 40px;
   cursor: pointer;
-
-  z-index: 1;
-
   box-shadow: 0 0 10px #000;
-
-  &.none{
-    display: none;
-  }
-
-  &:hover{
-    background-color: var(--clr-accent-shadow-1);
-  }
-
-  &.left {
-    left: 0;
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-  }
-  
-  &.right {
-    right: 0;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-  }
-
 }
 
+.carousel .arrow.none {
+  display: none;
+}
 
+.carousel .arrow:hover {
+  background-color: var(--clr-accent-shadow-1);
+}
 
-.carousel-items.carousel-items.scale-effect{
+.carousel .arrow.left {
+  left: 0;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.carousel .arrow.right {
+  right: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.carousel-items.carousel-items.scale-effect {
   scale: 0.95;
   filter: blur(1px);
 }
@@ -75,12 +68,12 @@
   scale: .9 1;
 }
 
-.carousel-items.skew-right *{
+.carousel-items.skew-right * {
   transform: skew(8deg);
   rotate: -2deg;
 }
-.carousel-items.skew-left *{
+
+.carousel-items.skew-left * {
   transform: skew(-8deg);
   rotate: 2deg;
 }
-

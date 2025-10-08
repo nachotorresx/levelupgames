@@ -2,7 +2,7 @@
   margin-bottom: 20px;
   display: grid;
   width: 100%;
-  grid-template-columns: [full-start info-start info-reduced-start] 1fr [info-reduced-end] 20ch [info-end more-games-start] auto [ more-games-end full-end];
+  grid-template-columns: [full-start info-start info-reduced-start] 1fr [info-reduced-end] 20ch [info-end more-games-start] auto [more-games-end full-end];
   grid-template-rows:
     [breadcrumbs-start]
     auto
@@ -13,236 +13,195 @@
     [gameTitle-end gameRate-start]
     auto
     [gameRate-end gameInfo-start more-games-start]
-    calc(var(--fs-body) * 10) 
+    calc(var(--fs-body) * 10)
     [gameInfo-end game-instructions-start]
     auto
     [game-instructions-end related-content-start]
     300px
-    [related-content-end rate-game-start]
+    [related-content-end comment-group-start]
     auto
-    [rate-game-end comment-group-start]
-    auto
-    [comment-group-end more-games-end]
-    ;
-    gap: 12px;
-    column-gap: 60px;
-
-
-  .breadcrumbs {
-    grid-column: info;
-    grid-row: breadcrumbs;
-    margin-top: 28px;
-    display: flex;
-
-    gap: 6px;
-
-    color: var(--clr-accent-light-3);
-
-    > a{
-      text-decoration: none;
-
-      &[href]:hover{
-        text-decoration: underline;
-      }
-    }
-
-    > a:last-of-type{
-      color: var(--clr-accent-light-2);
-    }
-  }
-
-  .title {
-    display: flex;
-  }
-
-  .col-full{
-    grid-column: full;
-  }
-
-  .col-info{
-    grid-column: info;
-  }
-  
-  .col-more-games{
-    grid-column: more-games;
-  }
-
-  .col-info-reduced{
-    grid-column: info-reduced;
-  }
-
-  > .game-title {
-    grid-row: gameTitle;
-    color: var(--clr-primary-dark-3);
-    display: grid;
-    grid-template-rows: auto;
-    grid-template-columns: auto 1fr;
-    align-items: center;
-    gap: 20px;
-
-    > .buttons-container{
-      display: flex;
-      justify-content: flex-end;
-
-      > span{
-        display: flex;
-        gap: 20px;
-      }
-    }
-  }
-
-  > .game-rate {
-    margin-top: 10px;
-    grid-row: gameRate;
-    display: flex;
-  }
-
-  #game-container {
-    justify-items: center;
-    grid-row: game;
-    overflow: hidden;
-    justify-items: center;
-    border-radius: 20px;
-    max-height: 100%;
-
-    >img {
-      max-height: 700px;
-      width: 100%;
-      object-fit: cover;
-      scale: 1.02;
-      filter: blur(3px) brightness(.25);
-    }
-
-    > .game-title {
-      z-index: 0;
-      display: grid;
-      justify-items: center;
-      gap: 12px;
-      color: var(--clr-white);
-    }
-
-  }
-
-  > .game-description{
-    grid-row: gameInfo;
-  }
-
-  > .related-content-title{
-    margin-top: 36px;
-    grid-row: related-content;
-  }
-
-  > .related-content{
-    margin-top: 36px;
-    grid-row: related-content;
-  }
-
-  > .rate-game{
-    margin-block: 40px;
-    display: flex;
-    border-radius: 20px;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--clr-secondary);
-    padding-block: 20px;
-
-    gap: 12px;
-    grid-row: rate-game;
-
-    > .stars-group {
-      color: var(--clr-accent);
-
-      &:has(.empty svg:nth-child(1):hover) .filled svg:nth-child(-1n + 1){visibility: visible;}
-      &:has(.empty svg:nth-child(2):hover) .filled svg:nth-child(-1n + 2){visibility: visible;}
-      &:has(.empty svg:nth-child(3):hover) .filled svg:nth-child(-1n + 3){visibility: visible;}
-      &:has(.empty svg:nth-child(4):hover) .filled svg:nth-child(-1n + 4){visibility: visible;}
-      &:has(.empty svg:nth-child(5):hover) .filled svg:nth-child(-1n + 5){visibility: visible;}
-
-      > *{
-      display: flex;
-      gap: 2px;
-      cursor: pointer;
-
-      &.filled{
-        pointer-events: none;
-
-        svg{
-          visibility: hidden;
-        }
-      }
-
-
-
-      &.visible > *{
-        --_time : .2s;
-
-
-        animation: translateTop var(--_time) cubic-bezier(.0,-5,0,5) forwards;
-        opacity: 0;
-        rotate: -10deg;
-
-        &:nth-child(1){animation-delay: calc(var(--_time) * 0);}
-        &:nth-child(2){animation-delay: calc(var(--_time) * 1);}
-        &:nth-child(3){animation-delay: calc(var(--_time) * 2);}
-        &:nth-child(4){animation-delay: calc(var(--_time) * 3);}
-        &:nth-child(5){animation-delay: calc(var(--_time) * 4);}
-      }
-    }
-  }
-  }
-
-  > .comment-group-title{
-    grid-row: comment-group;
-  }
-
-  > .comment-group{
-    background-color: var(--clr-secondary);
-    margin-top: 50px;
-    padding: 30px;
-    border-radius: 20px;
-    grid-row: comment-group;
-  }
-
-  > .game-instructions-title{
-    margin-top: 10px;
-    grid-row: game-instructions;
-  }
-
-  > .game-instructions{
-    margin-top: 40px;
-    grid-row: game-instructions;
-    display: grid;
-    gap: 10px;
-
-    ol{
-      line-height: 1.5rem;
-      list-style-position: inside;
-      li {
-        color: var(--clr-white);
-      }
-    }
-  }
-
-  section.sm{
-    border-radius: 30px;
-    background-color: var(--clr-secondary);
-    display: grid;
-    justify-items: center;
-    grid-row: more-games;
-    overflow: unset;
-    width: fit-content;
-    padding: 20px;
-    gap: 10px;
-  }
-
-
+    [comment-group-end more-games-end];
+  gap: 12px;
+  column-gap: 60px;
 }
 
+
+.game-page-wrapper .breadcrumbs {
+  grid-column: info;
+  grid-row: breadcrumbs;
+  margin-top: 28px;
+  display: flex;
+  gap: 6px;
+  color: var(--clr-accent-light-3);
+}
+
+.game-page-wrapper .breadcrumbs > a {
+  text-decoration: none;
+}
+
+.game-page-wrapper .breadcrumbs > a[href]:hover {
+  text-decoration: underline;
+}
+
+.game-page-wrapper .breadcrumbs > a:last-of-type {
+  color: var(--clr-accent-light-2);
+}
+
+
+.game-page-wrapper .title {
+  display: flex;
+}
+
+
+.game-page-wrapper .col-full {
+  grid-column: full;
+}
+
+.game-page-wrapper .col-info {
+  grid-column: info;
+}
+
+.game-page-wrapper .col-more-games {
+  grid-column: more-games;
+}
+
+.game-page-wrapper .col-info-reduced {
+  margin-top: 20px;
+  grid-column: info-reduced;
+}
+
+.game-page-wrapper > .game-title {
+  grid-row: gameTitle;
+  color: var(--clr-primary-dark-3);
+  display: grid;
+  grid-template-rows: auto;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 20px;
+}
+
+.game-page-wrapper > .game-title > .buttons-container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.game-page-wrapper > .game-title > .buttons-container > span {
+  display: flex;
+  gap: 20px;
+}
+
+
+.game-page-wrapper > .game-rate {
+  margin-top: 10px;
+  grid-row: gameRate;
+  display: flex;
+}
+
+
+.game-page-wrapper #game-container {
+  justify-items: center;
+  grid-row: game;
+  overflow: hidden;
+  border-radius: 20px;
+  max-height: 100%;
+}
+
+.game-page-wrapper #game-container > img {
+  max-height: 700px;
+  width: 100%;
+  object-fit: cover;
+  scale: 1.02;
+  filter: blur(3px) brightness(.25);
+}
+
+.game-page-wrapper #game-container > .game-title {
+  z-index: 0;
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  color: var(--clr-white);
+}
+
+
+.game-page-wrapper > .game-description {
+  grid-row: gameInfo;
+}
+
+
+.game-page-wrapper > .related-content-title {
+  margin-top: 50px;
+  grid-row: related-content;
+}
+
+.game-page-wrapper > .related-content {
+  margin-top: 110px;
+  grid-row: related-content;
+}
+
+
+.game-page-wrapper > .comment-group-title {
+  margin-top: 110px;
+  grid-row: comment-group;
+}
+
+.game-page-wrapper > .comment-group {
+  background-color: var(--clr-secondary);
+  margin-top: 180px;
+  padding: 30px;
+  border-radius: 20px;
+  grid-row: comment-group;
+}
+
+.game-page-wrapper > .game-instructions-title {
+  margin-top: 10px;
+  grid-row: game-instructions;
+}
+
+.game-page-wrapper > .game-instructions {
+  margin-top: 40px;
+  grid-row: game-instructions;
+  display: grid;
+  gap: 10px;
+}
+
+.game-page-wrapper > .game-instructions ol {
+  line-height: 1.5rem;
+  list-style-position: inside;
+}
+
+.game-page-wrapper > .game-instructions ol li {
+  color: var(--clr-white);
+}
+
+
+.game-page-wrapper section.sm {
+  border-radius: 30px;
+  background-color: var(--clr-secondary);
+  display: grid;
+  justify-items: center;
+  grid-row: more-games;
+  overflow: unset;
+  width: fit-content;
+  padding: 20px;
+  gap: 10px;
+}
+
+
 @keyframes translateTop {
-  to{
+  to {
     translate: 0 -3px;
     opacity: 1;
     rotate: 0deg;
   }
+}
+
+
+.rate {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.rate > svg {
+  color: var(--clr-accent-light-2);
 }

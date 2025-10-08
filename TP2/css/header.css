@@ -41,7 +41,7 @@ body > header > .wrapper .aside {
   gap: 17px;
 }
 
-/* 📱 Responsive - Mobile */
+
 @media screen and (width < 800px) {
   body > header > .wrapper .mobile {
     display: block;

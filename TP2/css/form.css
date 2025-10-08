@@ -1,4 +1,3 @@
-/* --- Label tipo texto (inputs) --- */
 label[role="group"].text {
   display: grid;
   gap: 4px;
@@ -6,14 +5,14 @@ label[role="group"].text {
   max-width: 240px;
 }
 
-/* Campo requerido */
+
 label[role="group"].text:has(> [required]) p::after {
   content: '*';
   color: var(--clr-discount);
   margin-inline: 4px;
 }
 
-/* Input dentro del label de texto */
+
 label[role="group"].text input {
   width: 100%;
   padding: 10px;
@@ -34,7 +33,6 @@ label[role="group"].text input:focus-visible {
   background-color: var(--clr-grey);
 }
 
-/* --- Checkbox --- */
 label[role="group"].checkbox {
   display: flex;
   align-items: center;
@@ -61,12 +59,11 @@ label[role="group"].checkbox .box {
   border-radius: 4px;
 }
 
-/* Cuando el checkbox está checked */
+
 label[role="group"].checkbox:has(input:checked) .box {
   background-color: var(--clr-green);
 }
 
-/* --- Searchbox & Form --- */
 [role="searchbox"],
 [role="form"] {
   width: 450px;
@@ -110,7 +107,7 @@ label[role="group"].checkbox:has(input:checked) .box {
   font-weight: var(--fw-bold);
 }
 
-/* Botones dentro de searchbox o form */
+
 [role="searchbox"] button,
 [role="form"] button {
   border: none;
@@ -138,14 +135,13 @@ label[role="group"].checkbox:has(input:checked) .box {
   animation-delay: 0.1s;
 }
 
-/* Íconos SVG */
 [role="searchbox"] svg,
 [role="form"] svg {
   color: var(--clr-primary-light-3);
   transform-origin: bottom right;
 }
 
-/* --- Animación shake --- */
+
 @keyframes shake {
   0%, 75%, 100% {
     rotate: 0deg;
@@ -155,14 +151,13 @@ label[role="group"].checkbox:has(input:checked) .box {
   }
 }
 
-/* --- Formulario general --- */
+
 form.form {
   display: grid;
   width: 250px;
   gap: 18px;
 }
 
-/* --- Texto general --- */
 p {
   color: var(--clr-white);
 }

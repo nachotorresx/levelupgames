@@ -1,4 +1,3 @@
-/*animacion loading 5 seg */
 window.addEventListener("load", () => {
   setTimeout(() => {
     const loader = document.getElementById("loader");
