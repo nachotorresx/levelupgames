@@ -205,10 +205,10 @@
   align-items: center;
 }
 
-.rate > svg {
+.rate > svg, .game-rate > svg {
   color: var(--clr-accent-light-2);
 }
 
-.game-rate > svg {
-  color: var(--clr-accent-light-2);
+.rate > svg:hover, .game-rate > svg:hover {
+  animation: jump .3s cubic-bezier(.0,-5,1,5);
 }
