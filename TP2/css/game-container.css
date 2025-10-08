@@ -195,6 +195,9 @@
   }
 }
 
+.comment {
+  align-items: center;
+}
 
 .rate {
   display: flex;
@@ -203,5 +206,9 @@
 }
 
 .rate > svg {
+  color: var(--clr-accent-light-2);
+}
+
+.game-rate > svg {
   color: var(--clr-accent-light-2);
 }
