@@ -211,4 +211,5 @@
 
 .star-jump:hover {
   animation: jump .3s cubic-bezier(.0,-5,1,5);
+  cursor: pointer;
 }
