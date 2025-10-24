@@ -395,15 +395,45 @@ class Juego {
         }
     }
 
+    dibujarInstruccionesDuranteJuego() {
+        const instrucciones = [
+            '• Hacé clic en “Comenzar” para iniciar',
+                 'el nivel y activar el temporizador..',
+            '• Seleccioná una subimagen para girarla:' ,
+                '-Clic izquierdo gira hacia la izquierda', 
+                '-Clic derecho gira hacia la derecha',
+            '• Ordená las piezas hasta completar',
+            '   la imagen',
+            '• Usá la ayudita si te trabás (resta 5 seg)',
+            '• Elegí si querés volver al Menú Principal ',
+             'o avanzar al siguiente nivel mas difícil.'
+        ];
+
+        const x = 20;
+        const yInicial = 120;
+        const interlineado = 24;
+
+        this.ctx.fillStyle = '#213743';
+        this.ctx.font = '18px Nunito';
+        this.ctx.textAlign = 'left';
+
+        instrucciones.forEach((texto, i) => {
+            this.ctx.fillText(texto, x, yInicial + i * interlineado);
+        });
+    }
+
+
     dibujarJugando() {
         // Fondo
         this.ctx.fillStyle = '#F1B252';
-        
+
         this.ctx.fillRect(0, 0, this.ancho, this.alto);
 
         // Nivel
         this.ctx.textAlign = 'left';
         this.dibujarTextoConEstilo('Nivel ' + this.nivelActual, 20, 40, 28, '#213743', 3, 4, 2);
+
+        this.dibujarInstruccionesDuranteJuego();
 
         // Timer
         this.temporizador.dibujar(this.ctx, this.ancho / 2, 40);
@@ -462,7 +492,7 @@ class Juego {
     dibujarCompletado() {
         // === Fondo general del canvas ===
         this.ctx.fillStyle = '#F1B252';
-        
+
         this.ctx.fillRect(0, 0, this.ancho, this.alto);
 
         // Puzzle completado
@@ -541,7 +571,7 @@ class Juego {
     dibujarPerdido() {
         // === Fondo general ===
         this.ctx.fillStyle = '#F1B252';
-        
+
         this.ctx.fillRect(0, 0, this.ancho, this.alto);
 
         // Puzzle incompleto

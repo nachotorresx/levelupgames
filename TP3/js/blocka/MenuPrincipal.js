@@ -19,6 +19,7 @@ class MenuPrincipal {
         };
         this.imagenFondo.src = '../img/fondoPuzzle.jpg';
     }
+    
 
     crearBotones() {
         const anchoBton = 160;
