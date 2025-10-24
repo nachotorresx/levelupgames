@@ -151,6 +151,7 @@ class MenuPrincipal {
         }
     }
 
+
     dibujarBoton(ctx, boton) {
     // Elegir el color del botón
     let color = boton.color;

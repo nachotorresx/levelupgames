@@ -385,6 +385,7 @@ class Juego {
 
         if (this.estadoActual === this.MENU) {
             this.menu.dibujar(this.ctx);
+            this.dibujarInstruccionesMenu();
         } else if (this.estadoActual === this.JUGANDO) {
             this.verificarTiempo();
             this.dibujarJugando();
@@ -393,6 +394,54 @@ class Juego {
         } else if (this.estadoActual === this.PERDIDO) {
             this.dibujarPerdido();
         }
+    }
+
+        dibujarInstruccionesMenu() {
+        const ctx = this.ctx;
+
+        // === Fondo del panel de instrucciones ===
+        const anchoPanel = 600;
+        const altoPanel = 230;
+        const x = (this.ancho - anchoPanel) / 2;
+        const y = (this.alto - altoPanel) / 2 - 210; // un poco más abajo del centro
+        const radio = 20;
+
+        // Sombra suave para el panel
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+        ctx.shadowBlur = 10;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 4;
+
+        ctx.beginPath();
+        ctx.roundRect(x, y, anchoPanel, altoPanel, radio);
+        ctx.fillStyle = 'rgba(26, 44, 56, 0.85)';
+        ctx.fill();
+
+        // Quitar sombra
+        ctx.shadowColor = 'transparent';
+        ctx.shadowBlur = 0;
+
+        // === Texto ===
+        const instrucciones = [
+            '🧩  Cómo jugar:',
+            '• Hacé clic en “Comenzar” para iniciar el nivel.',
+            '• Girá las piezas con clic izquierdo o derecho.',
+            '• Ordená la imagen antes de que se acabe el tiempo.',
+            '• Usá la ayudita si te trabás (resta 5 segundos).',
+            '¡Scrollea y mira las imagenes representativas del juego!'
+        ];
+
+        ctx.fillStyle = 'white';
+        ctx.font = '18px Nunito';
+        ctx.textAlign = 'center';
+
+        let yTexto = y + 50;
+        const interlineado = 28;
+
+        instrucciones.forEach((linea) => {
+            ctx.fillText(linea, this.ancho / 2, yTexto);
+            yTexto += interlineado;
+        });
     }
 
     dibujarInstruccionesDuranteJuego() {
