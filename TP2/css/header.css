@@ -10,6 +10,7 @@ body > header .mobile {
 }
 body > header .desktop {
   color: var(--clr-primary-light-3);
+  cursor: pointer;
 }
 
 body > header.active {
