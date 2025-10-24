@@ -209,7 +209,12 @@
   color: var(--clr-accent-light-2);
 }
 
-.star-jump:hover {
-  animation: jump .3s cubic-bezier(.0,-5,1,5);
+.star-jump{
   cursor: pointer;
+}
+
+.star-jump:hover {
+  cursor: pointer;
+  animation: jump .3s cubic-bezier(.0,-5,1,5);
+  
 }
