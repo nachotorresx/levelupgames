@@ -3,16 +3,16 @@ class CargadorImagenes {
     constructor() {
         this.imagenes = [];
         this.nombresImagenes = [
-             'blockaFoto1.jpg',
-             'blockaFoto2.jpg',
-             'blockaFoto3.jpg',
-             'blockaFoto4.jpg',
-             'blockaFoto5.jpg',
-             'blockaFoto6.jpg',
-             'blockaFoto7.jpg',
-             'blockaFoto8.jpg',
-             'blockaFoto9.jpg',
-             'blockaFoto10.jpg'
+             'prueba.png',
+             'prueba.png',
+             'prueba.png',
+             'prueba.png',
+             'prueba.png',
+             'prueba.png',
+             'prueba.png',
+             'prueba.png',
+             'prueba.png',
+             'prueba.png'
 
         ];
         this.todasCargadas = false;
@@ -40,7 +40,7 @@ class CargadorImagenes {
             const img = new Image();
             
             // Cuando se cargue una imagen
-            img.onload = () => {
+            img.onload = () => {    
                 this.cuantasCargadas = this.cuantasCargadas + 1;
                 
                 // Si se cargaron todas

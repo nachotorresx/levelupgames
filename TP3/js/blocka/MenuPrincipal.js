@@ -137,7 +137,7 @@ class MenuPrincipal {
             ctx.drawImage(this.imagenFondo, 0, 0, this.anchoCanvas, this.altoCanvas);
             
             // Overlay semi-transparente para mejorar legibilidad
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.9)';
             ctx.fillRect(0, 0, this.anchoCanvas, this.altoCanvas);
         } else {
             // Fondo por defecto si la imagen no está cargada
