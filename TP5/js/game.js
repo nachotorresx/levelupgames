@@ -850,8 +850,8 @@ function reiniciarJuego() {
     // Actualizar displays
     actualizarDisplay();
 
-    // Reiniciar la cuenta regresiva
-    iniciarCuentaRegresiva();
+    //Reiniciar juego
+    iniciar();
 
     // Reiniciar el bucle principal y los temporizadores
     buclePrincipal();
