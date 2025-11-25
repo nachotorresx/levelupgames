@@ -1,13 +1,21 @@
+// === Clase principal del juego ===
 export class Juego {
     constructor(ctx, ancho, alto, config) {
+        // Contexto del canvas (donde se dibuja todo)
         this.ctx = ctx;
         this.ancho = ancho;
         this.alto = alto;
         this.config = config;
+
+        // Tiempo del juego (por ahora 300 seg)
         this.tiempoRestante = 300;
         this.intervaloTimer = null;
+
+        // Variables de estado general
         this._lastMouseUp = 0;
         this.mostrarVictoria = false;
+
+        // Función de fin del juego enlazada para eventos
         this._onClick = this.onClickFinJuego.bind(this);
 
         // === Botón Reiniciar ===
@@ -19,7 +27,7 @@ export class Juego {
         };
 
         // === Botón de Instrucciones ===
-        this.mostrarInstrucciones = false;
+        this.mostrarInstrucciones = false; // bandera para mostrar u ocultar
         this.botonInstrucciones = {
             x: 20,
             y: 60,
@@ -27,7 +35,7 @@ export class Juego {
             h: 35
         };
 
-        // ==== Imágenes ====
+        // ==== Carga de imágenes ====
         this.tablero = new Image();
         this.ficha = new Image();
         this.fichaSeleccionada = new Image();
@@ -35,6 +43,7 @@ export class Juego {
         this.fichaEliminada = new Image();
         this.fichaHover = new Image();
 
+        // Configuración visual según el tema (dorado o plateado)
         if (config === "dorado") {
             this.tablero.src = "../img/tablero-plateado.png";
             this.ficha.src = "../img/ficha-dorada.png";
@@ -47,135 +56,155 @@ export class Juego {
             this.fichaHover.src = "../img/ficha-plateada-hover.png";
         }
 
+        // Imágenes comunes
         this.fichaDisponible.src = "../img/ficha-disponible.png";
         this.fichaEliminada.src = "../img/ficha-eliminada.png";
 
-        // Tamaño de ficha
+        // Tamaño de cada ficha en píxeles
         this.tamañoFicha = 70;
 
-        // Área jugable dentro del tablero 
+        // Área jugable dentro del tablero (coordenadas dentro del canvas)
         this.areaX = 388;
         this.areaY = 75;
         this.areaW = 550;
         this.areaH = 550;
 
-        // Estado del juego
-        this.matriz = this.generarMatrizInicial();
-        this.seleccionada = null;
-        this.destinosDisponibles = [];
-        this.dragging = false;
-        this.celdaHover = null;
-        this.dragPos = { x: 0, y: 0 };
-        this.dragOffset = { x: 0, y: 0 };
+        // === Estado inicial del juego ===
+        this.matriz = this.generarMatrizInicial(); // crea la matriz 7x7
+        this.seleccionada = null; // ficha seleccionada
+        this.destinosDisponibles = []; // movimientos posibles
+        this.dragging = false; // si se está arrastrando una ficha
+        this.celdaHover = null; // celda sobre la que está el mouse
+        this.dragPos = { x: 0, y: 0 }; // posición del arrastre
+        this.dragOffset = { x: 0, y: 0 }; // corrección visual del arrastre
 
-        // Estado de fin del juego
+        // === Estado de fin del juego ===
         this.juegoTerminado = false;
         this.botonesFin = null;
         this.callbackReiniciar = null;
         this.callbackMenu = null;
 
-        // === Eventos ===
+        // === Eventos de interacción ===
         this.canvas = this.ctx.canvas;
         this._onMouseDown = (e) => this.onMouseDown(e);
         this._onMouseMove = (e) => this.onMouseMove(e);
         this._onMouseUp = (e) => this.onMouseUp(e);
 
+        // Escucha los eventos principales del mouse
         this.canvas.addEventListener("mousedown", this._onMouseDown);
         this.canvas.addEventListener("mousemove", this._onMouseMove);
         window.addEventListener("mouseup", this._onMouseUp);
 
-        // Clic general (incluye botón de instrucciones)
+        // Evento general de click (botón de instrucciones o acciones finales)
         this.canvas.addEventListener("click", (e) => {
             const rect = this.canvas.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
 
+            // Si hace clic en el botón de instrucciones
             const b = this.botonInstrucciones;
             if (x >= b.x && x <= b.x + b.w && y >= b.y && y <= b.y + b.h) {
                 this.mostrarInstrucciones = !this.mostrarInstrucciones;
                 return;
             }
 
-            // Si no clickeó el botón de instrucciones, sigue el flujo normal
+            // Si no tocó el botón, sigue el flujo normal (fin del juego)
             this.onClickFinJuego(e);
         });
     }
 
-    generarMatrizInicial() {
-        const tablero = [];
-        for (let i = 0; i < 7; i++) {
-            tablero[i] = [];
-            for (let j = 0; j < 7; j++) {
-                const fuera =
-                    (i < 2 && j < 2) ||
-                    (i < 2 && j > 4) ||
-                    (i > 4 && j < 2) ||
-                    (i > 4 && j > 4);
-                if (fuera) tablero[i][j] = -1;
-                else if (i === 3 && j === 3) tablero[i][j] = 2; // ficha eliminada visible
-                else tablero[i][j] = 1;
-            }
-        }
-        return tablero;
+     // Se llama cuando el jugador no tiene más movimientos válidos.
+    finDelJuego() {
+        // Muestra la pantalla final con un mensaje específico
+        this.mostrarPantallaFin("¡Te quedaste sin movimientos!");
     }
 
-    // --- util: conversión mouse <-> celda (solo si dentro del área válida) ---
-    getMouseCoords(e) {
-        const rect = this.canvas.getBoundingClientRect();
-        return {
-            x: e.clientX - rect.left,
-            y: e.clientY - rect.top,
+
+    // === Método que se ejecuta cuando se termina el tiempo ===
+    finDelTiempo() {
+        // Detiene el temporizador
+        clearInterval(this.intervaloTimer);
+
+        // Marca que el juego terminó
+        this.juegoTerminado = true;
+
+        // Redibuja el tablero para mostrar el estado final
+        this.dibujar();
+
+        // Calcula el centro de la pantalla (para ubicar los botones)
+        const centerX = this.ancho / 2;
+        const centerY = this.alto / 2;
+
+        // Tamaño de los botones finales
+        const botonW = 220;
+        const botonH = 60;
+
+        // Define los botones que se mostrarán en la pantalla de fin
+        this.botonesFin = {
+            reiniciar: { x: centerX - botonW - 20, y: centerY + 60, w: botonW, h: botonH },
+            menu: { x: centerX + 20, y: centerY + 60, w: botonW, h: botonH },
         };
+
+        // Elimina los listeners de interacción para evitar clicks durante el fin
+        this.canvas.removeEventListener("mousedown", this._onMouseDown);
+        this.canvas.removeEventListener("mousemove", this._onMouseMove);
+        window.removeEventListener("mouseup", this._onMouseUp);
+
+        // (Podría haberse usado para reactivar el click del menú final)
+        // this.canvas.addEventListener("click", this.onClickFinJuego);
+
+        // Marca que debe mostrarse el mensaje de “fin por tiempo”
+        this.mostrarCartelTiempo = true;
     }
 
-    getCeldaDesdeCoordenadas(x, y) {
-        const celdas = 7;
-        const espacioX = this.areaW / celdas;
-        const espacioY = this.areaH / celdas;
 
-        const col = Math.floor((x - this.areaX) / espacioX);
-        const fila = Math.floor((y - this.areaY) / espacioY);
+    // === Verifica si el jugador ganó la partida ===
+    verificarVictoria() {
+        let cantidadFichas = 0; // Contador de fichas activas
+        let fichaCentral = false; // Bandera para ver si hay una ficha en el centro
 
-        if (
-            fila >= 0 && fila < 7 &&
-            col >= 0 && col < 7 &&
-            this.matriz[fila][col] !== -1
-        ) {
-            return { fila, col };
-        }
-        return null;
-    }
+        // Recorre toda la matriz del tablero
+        for (let fila = 0; fila < 7; fila++) {
+            for (let col = 0; col < 7; col++) {
+                if (this.matriz[fila][col] === 1) { // 1 = ficha activa
+                    cantidadFichas++;
 
-    // --- movimientos válidos con la regla clásica (salto sobre una pieza) ---
-    obtenerMovimientosDisponibles(fila, col) {
-        const dirs = [
-            { df: -2, dc: 0 }, // arriba
-            { df: 2, dc: 0 },  // abajo
-            { df: 0, dc: -2 }, // izquierda
-            { df: 0, dc: 2 },  // derecha
-        ];
-        const movs = [];
-
-        for (let d of dirs) {
-            const nf = fila + d.df;
-            const nc = col + d.dc;
-            const midf = fila + Math.floor(d.df / 2);
-            const midc = col + Math.floor(d.dc / 2);
-
-
-            if (
-                nf >= 0 && nf < 7 && nc >= 0 && nc < 7 &&
-                this.matriz[nf][nc] !== -1 && // destino dentro del área válida
-                (this.matriz[nf][nc] === 0 || this.matriz[nf][nc] === 2) && // destino vacío o eliminada
-                this.matriz[midf][midc] === 1 // hay pieza para saltar
-            ) {
-                movs.push({ fila: nf, col: nc, medio: { fila: midf, col: midc } });
+                    // Verifica si la ficha está en el centro del tablero
+                    if (fila === 3 && col === 3) {
+                        fichaCentral = true;
+                    }
+                }
             }
         }
-        return movs;
+
+        // Si solo queda una ficha y está en el centro → ganó
+        if (cantidadFichas === 1 && fichaCentral) {
+            clearInterval(this.intervaloTimer); // detiene el cronómetro
+            this.mostrarVictoria = true; // activa el cartel de victoria
+        }
     }
 
-    // --- eventos ---
+
+    // === Limpia completamente la instancia antes de destruir el juego ===
+    destruir() {
+        // Detiene el temporizador si sigue activo
+        if (this.intervaloTimer) {
+            clearInterval(this.intervaloTimer);
+            this.intervaloTimer = null;
+        }
+
+        // Elimina todos los listeners para evitar fugas de memoria
+        try {
+            this.canvas.removeEventListener("mousedown", this._onMouseDown);
+            this.canvas.removeEventListener("mousemove", this._onMouseMove);
+            window.removeEventListener("mouseup", this._onMouseUp);
+            this.canvas.removeEventListener("click", this._onClick);
+        } catch (err) {
+            // Si alguno ya fue removido, no genera error
+        }
+    }
+
+    // === Evento cuando se presiona el mouse ===
     onMouseDown(e) {
         const { x, y } = this.getMouseCoords(e);
         const celda = this.getCeldaDesdeCoordenadas(x, y);
@@ -184,14 +213,17 @@ export class Juego {
         const { fila, col } = celda;
         const val = this.matriz[fila][col];
 
+        // Si hizo clic sobre una ficha
         if (val === 1) {
-            // comenzar drag: no tocamos la matriz todavía (no dejarla vacía)
+            // Marca la ficha como seleccionada
             this.seleccionada = { fila, col };
+            // Calcula sus movimientos posibles
             this.destinosDisponibles = this.obtenerMovimientosDisponibles(fila, col);
 
-            // preparar drag visual
+            // Activa el arrastre
             this.dragging = true;
-            // offset para centrar la imagen respecto del cursor
+
+            // Calcula la posición central de la celda para centrar la ficha al arrastrar
             const espacioX = this.areaW / 7;
             const espacioY = this.areaH / 7;
             const cellCenterX = this.areaX + col * espacioX + espacioX / 2;
@@ -199,106 +231,126 @@ export class Juego {
             this.dragOffset.x = cellCenterX - x;
             this.dragOffset.y = cellCenterY - y;
 
+            // Guarda la posición actual del mouse
             this.dragPos.x = x;
             this.dragPos.y = y;
 
-            // redibujar para mostrar origen como "eliminada" visualmente durante el drag
+            // Redibuja el tablero para mostrar la ficha "levantada"
             this.dibujar();
             return;
         }
 
-        // Si se hace mousedown en un destino válido, y ya había una seleccionada,
-        // realizamos el movimiento (esto permite click rápido además del drag).
+        // Si hace clic en una celda vacía y hay una ficha seleccionada
         if ((val === 0 || val === 2) && this.seleccionada) {
             const destinoValido = this.destinosDisponibles.find(d => d.fila === fila && d.col === col);
             if (destinoValido) {
+                // Si el movimiento es válido, se realiza el salto
                 this.confirmarMovimiento(destinoValido);
             }
         }
     }
 
+    // === Evento cuando se mueve el mouse ===
     onMouseMove(e) {
         const { x, y } = this.getMouseCoords(e);
         const celda = this.getCeldaDesdeCoordenadas(x, y);
 
+        // Si no está arrastrando
         if (!this.dragging) {
-            // 🔹 Detectar si el mouse está sobre una ficha jugable
+            // Cambia el cursor si pasa por una ficha jugable
             if (celda && this.matriz[celda.fila][celda.col] === 1) {
                 this.canvas.style.cursor = "pointer";
-                this.celdaHover = celda; // guardamos la celda sobre la que estamos
+                this.celdaHover = celda;
             } else {
                 this.canvas.style.cursor = "default";
                 this.celdaHover = null;
             }
         } else {
-            // 🔹 Durante el arrastre, actualizamos la posición de la ficha
+            // Si está arrastrando, actualiza la posición de la ficha
             const minX = this.areaX;
             const maxX = this.areaX + this.areaW;
             const minY = this.areaY;
             const maxY = this.areaY + this.areaH;
 
+            // Mantiene el arrastre dentro del tablero
             this.dragPos.x = Math.max(minX, Math.min(maxX, x));
             this.dragPos.y = Math.max(minY, Math.min(maxY, y));
         }
 
+        // Redibuja el tablero constantemente
         this.dibujar();
     }
 
-
+    // === Evento cuando se suelta el mouse ===
     onMouseUp(e) {
+        // Si no se estaba arrastrando una ficha, no hace nada
         if (!this.dragging) return;
+
+        // Finaliza el arrastre
         this.dragging = false;
 
+        // Obtiene las coordenadas del mouse dentro del canvas
         const { x, y } = this.getMouseCoords(e);
+
+        // Determina en qué celda se soltó el mouse
         const celda = this.getCeldaDesdeCoordenadas(x, y);
 
+        // Si no hay ficha seleccionada, se termina la función
         if (!this.seleccionada) return;
 
+        // Si se soltó dentro de una celda válida
         if (celda) {
-            const destinoValido = this.destinosDisponibles.find(d => d.fila === celda.fila && d.col === celda.col);
+            // Busca si la celda de destino es un movimiento permitido
+            const destinoValido = this.destinosDisponibles.find(
+                d => d.fila === celda.fila && d.col === celda.col
+            );
+
             if (destinoValido) {
-                // confirmar movimiento
+                // Si el destino es válido, confirma el movimiento
                 this.confirmarMovimiento(destinoValido);
                 return;
             }
         }
 
-        // si no hay destino válido: cancelar drag (no tocar la matriz)
+        // Si no se soltó sobre un destino válido:
+        // cancela el arrastre y vuelve todo a estado normal
         this.seleccionada = null;
         this.destinosDisponibles = [];
-        this.dibujar();
-        this._lastMouseUp = Date.now();
+        this.dibujar(); // redibuja el tablero
+        this._lastMouseUp = Date.now(); // guarda el momento del mouseup (para prevenir clicks fantasmas)
     }
 
-    // Handler de clicks en el cartel
-
+    // === Manejador de clics en los botones del juego (HUD o pantalla final) ===
     onClickFinJuego(e) {
-        // prevenir clicks fantasma justo después del mouseup
+        // Previene "clicks fantasma" justo después de soltar el mouse (por doble evento)
         const now = Date.now();
         if (now - (this._lastMouseUp || 0) < 120) return;
 
-        // coordenadas relativas al canvas (consistente con getMouseCoords)
+        // Convierte las coordenadas del evento a coordenadas relativas al canvas
         const coords = this.getMouseCoords(e);
         const offsetX = coords.x;
         const offsetY = coords.y;
 
-        // 1) Si NO estamos en pantalla final: manejar HUD (Reiniciar)
+        // --- 1) Si NO estamos en la pantalla final ---
         if (!this.juegoTerminado) {
+            // Detecta si se hizo click en el botón Reiniciar
             const b = this.botonReiniciar;
             if (
                 offsetX >= b.x && offsetX <= b.x + b.w &&
                 offsetY >= b.y && offsetY <= b.y + b.h
             ) {
+                // Si el botón tiene asignada una función de callback, la ejecuta
                 if (this.callbackReiniciar) this.callbackReiniciar();
                 return;
             }
-            // (aquí podrías manejar otros botones HUD como Instrucciones si los agregas)
+            // (Aquí podrías agregar más botones, por ejemplo de instrucciones)
         }
 
-        // 2) Si estamos en pantalla final, manejar sus botones (si existen)
+        // --- 2) Si ESTAMOS en la pantalla final (fin de juego) ---
         if (this.botonesFin) {
             const { reiniciar, menu } = this.botonesFin;
 
+            // Click en botón "Reiniciar" (pantalla final)
             if (
                 offsetX >= reiniciar.x && offsetX <= reiniciar.x + reiniciar.w &&
                 offsetY >= reiniciar.y && offsetY <= reiniciar.y + reiniciar.h
@@ -307,6 +359,7 @@ export class Juego {
                 return;
             }
 
+            // Click en botón "Menú principal" (pantalla final)
             if (
                 offsetX >= menu.x && offsetX <= menu.x + menu.w &&
                 offsetY >= menu.y && offsetY <= menu.y + menu.h
@@ -317,194 +370,159 @@ export class Juego {
         }
     }
 
-    tieneMovimientosPosibles() {
-        for (let fila = 0; fila < 7; fila++) {
-            for (let col = 0; col < 7; col++) {
-                if (this.matriz[fila][col] === 1) {
-                    const movs = this.obtenerMovimientosDisponibles(fila, col);
-                    if (movs.length > 0) return true;
-                }
+    // === Genera la matriz inicial del tablero (7x7) ===
+    generarMatrizInicial() {
+        const tablero = [];
+        for (let i = 0; i < 7; i++) {
+            tablero[i] = [];
+            for (let j = 0; j < 7; j++) {
+                // Las esquinas están fuera del tablero
+                const fuera =
+                    (i < 2 && j < 2) ||
+                    (i < 2 && j > 4) ||
+                    (i > 4 && j < 2) ||
+                    (i > 4 && j > 4);
+
+                if (fuera) tablero[i][j] = -1; // zona no jugable
+                else if (i === 3 && j === 3) tablero[i][j] = 2; // centro vacío
+                else tablero[i][j] = 1; // ficha normal
             }
         }
-        return false;
+        return tablero;
     }
 
-
-    confirmarMovimiento(destinoObjeto) {
-        const f1 = this.seleccionada.fila;
-        const c1 = this.seleccionada.col;
-        const f2 = destinoObjeto.fila;
-        const c2 = destinoObjeto.col;
-        const fm = destinoObjeto.medio.fila;
-        const cm = destinoObjeto.medio.col;
-
-        // origen y medio se vuelven eliminadas visualmente
-        this.matriz[f1][c1] = 2;
-        this.matriz[fm][cm] = 2;
-
-        // destino siempre se convierte en ficha activa
-        this.matriz[f2][c2] = 1;
-
-        //  IMPORTANTE: limpiar el array de destinos y selección
-        this.seleccionada = null;
-        this.destinosDisponibles = [];
-
-        // Forzar redibujo completo del tablero actual
-        this.dibujar();
-
-        //  Verificar si ganó
-        this.verificarVictoria();
-
-        // 🔹 Después de mover, verificar si quedan movimientos posibles
-        if (!this.tieneMovimientosPosibles()) {
-            this.finDelJuego();
-        }
-
-    }
-
-    iniciarTimer() {
-        this.intervaloTimer = setInterval(() => {
-            this.tiempoRestante--;
-
-            if (this.tiempoRestante <= 0) {
-                clearInterval(this.intervaloTimer);
-                this.mostrarPantallaFin("¡Se acabó el tiempo!");
-            }
-        }, 1000);
-    }
-
-    // Pegar dentro de la clase Juego (por ejemplo justo después de iniciarTimer)
-
-    mostrarPantallaFin(mensaje) {
-        // parar timer (si quedó alguno)
-        if (this.intervaloTimer) {
-            clearInterval(this.intervaloTimer);
-            this.intervaloTimer = null;
-        }
-
-        // marcaremos que el juego terminó y guardamos el mensaje
-        this.juegoTerminado = true;
-        this.mensajeFin = mensaje || "Fin del juego";
-
-        // bandera usada en dibujar() para determinar texto
-        this.mostrarCartelTiempo = String(mensaje).toLowerCase().includes("tiempo");
-
-        // crear botones en pantalla (igual que antes)
-        const centerX = this.ancho / 2;
-        const centerY = this.alto / 2;
-        const botonW = 220;
-        const botonH = 60;
-
-        this.botonesFin = {
-            reiniciar: { x: centerX - botonW - 20, y: centerY + 60, w: botonW, h: botonH },
-            menu: { x: centerX + 20, y: centerY + 60, w: botonW, h: botonH },
+    // === Convierte las coordenadas del mouse a coordenadas relativas dentro del canvas ===
+    getMouseCoords(e) {
+        const rect = this.canvas.getBoundingClientRect();
+        return {
+            x: e.clientX - rect.left,
+            y: e.clientY - rect.top,
         };
-
-        // quitar listeners de interacción de juego para bloquear input (pero NO quitamos el click global que maneja botones)
-        try {
-            this.canvas.removeEventListener("mousedown", this._onMouseDown);
-            this.canvas.removeEventListener("mousemove", this._onMouseMove);
-            window.removeEventListener("mouseup", this._onMouseUp);
-        } catch (err) {
-            // no crashear si algo ya fue removido
-        }
-
-        // forzamos un dibujado final para que se vea el cartel al instante
-        this.dibujar();
     }
 
-    // Mantener compatibilidad con confirmaciones anteriores
-    finDelJuego() {
-        this.mostrarPantallaFin("¡Te quedaste sin movimientos!");
-    }
-
-
-    finDelTiempo() {
-        clearInterval(this.intervaloTimer);
-        this.juegoTerminado = true;
-        this.dibujar();
-
-        const centerX = this.ancho / 2;
-        const centerY = this.alto / 2;
-
-        const botonW = 220;
-        const botonH = 60;
-
-        this.botonesFin = {
-            reiniciar: { x: centerX - botonW - 20, y: centerY + 60, w: botonW, h: botonH },
-            menu: { x: centerX + 20, y: centerY + 60, w: botonW, h: botonH },
-        };
-
-        this.canvas.removeEventListener("mousedown", this._onMouseDown);
-        this.canvas.removeEventListener("mousemove", this._onMouseMove);
-        window.removeEventListener("mouseup", this._onMouseUp);
-
-        //this.canvas.addEventListener("click", this.onClickFinJuego);
-
-        this.mostrarCartelTiempo = true; // para el texto en dibujar()
-    }
-
-    verificarVictoria() {
-        let cantidadFichas = 0;
-        let fichaCentral = false;
-
-        for (let fila = 0; fila < 7; fila++) {
-            for (let col = 0; col < 7; col++) {
-                if (this.matriz[fila][col] === 1) {
-                    cantidadFichas++;
-
-                    if (fila === 3 && col === 3) {
-                        fichaCentral = true;
-                    }
-                }
-            }
-        }
-
-        if (cantidadFichas === 1 && fichaCentral) {
-            clearInterval(this.intervaloTimer);
-
-            this.mostrarVictoria = true;
-        }
-    }
-
-
-    // Llamalo desde fuera antes de descartar la instancia
-    destruir() {
-        // limpiar timer
-        if (this.intervaloTimer) {
-            clearInterval(this.intervaloTimer);
-            this.intervaloTimer = null;
-        }
-
-        // remover listeners (si existen)
-        try {
-            this.canvas.removeEventListener("mousedown", this._onMouseDown);
-            this.canvas.removeEventListener("mousemove", this._onMouseMove);
-            window.removeEventListener("mouseup", this._onMouseUp);
-            this.canvas.removeEventListener("click", this._onClick);
-        } catch (err) {
-            // no pasa nada si ya fueron removidos
-        }
-    }
-
-
-
-    // --- dibujo ---
-    dibujar() {
-        const ctx = this.ctx;
-        ctx.save();
-        ctx.drawImage(this.tablero, 0, 0, this.ancho, this.alto);
-        ctx.restore();
-
+    // === Devuelve qué celda del tablero fue clickeada (fila y columna) ===
+    getCeldaDesdeCoordenadas(x, y) {
         const celdas = 7;
         const espacioX = this.areaW / celdas;
         const espacioY = this.areaH / celdas;
 
-        // Mostrar cronómetro
+        // Se calcula la celda según la posición relativa del click
+        const col = Math.floor((x - this.areaX) / espacioX);
+        const fila = Math.floor((y - this.areaY) / espacioY);
+
+        // Si está dentro del tablero y no es una zona -1
+        if (
+            fila >= 0 && fila < 7 &&
+            col >= 0 && col < 7 &&
+            this.matriz[fila][col] !== -1
+        ) {
+            return { fila, col };
+        }
+        return null; // si se clickeó fuera del área jugable
+    }
+
+    // === Calcula todos los movimientos válidos desde una celda ===
+    obtenerMovimientosDisponibles(fila, col) {
+        // Direcciones posibles (arriba, abajo, izquierda, derecha)
+        const dirs = [
+            { df: -2, dc: 0 },
+            { df: 2, dc: 0 },
+            { df: 0, dc: -2 },
+            { df: 0, dc: 2 },
+        ];
+        const movs = [];
+
+        for (let d of dirs) {
+            const nf = fila + d.df; // destino final
+            const nc = col + d.dc;
+            const midf = fila + Math.floor(d.df / 2); // ficha saltada (intermedia)
+            const midc = col + Math.floor(d.dc / 2);
+
+            // Revisa que:
+            // - destino esté dentro del tablero
+            // - destino sea una celda vacía o eliminada
+            // - haya una ficha en el medio para saltar
+            if (
+                nf >= 0 && nf < 7 && nc >= 0 && nc < 7 &&
+                this.matriz[nf][nc] !== -1 &&
+                (this.matriz[nf][nc] === 0 || this.matriz[nf][nc] === 2) &&
+                this.matriz[midf][midc] === 1
+            ) {
+                // Agrega el movimiento válido a la lista
+                movs.push({ fila: nf, col: nc, medio: { fila: midf, col: midc } });
+            }
+        }
+        return movs;
+    }
+
+    // === Verifica si aún hay movimientos posibles en el tablero ===
+    tieneMovimientosPosibles() {
+        for (let fila = 0; fila < 7; fila++) {
+            for (let col = 0; col < 7; col++) {
+                // Solo analiza las celdas que tienen una ficha
+                if (this.matriz[fila][col] === 1) {
+                    // Obtiene los movimientos válidos desde esa ficha
+                    const movs = this.obtenerMovimientosDisponibles(fila, col);
+                    if (movs.length > 0) return true; // si encuentra uno, retorna true
+                }
+            }
+        }
+        // Si ninguna ficha puede moverse, retorna false
+        return false;
+    }
+
+    // === Confirma y ejecuta un movimiento válido ===
+    confirmarMovimiento(destinoObjeto) {
+        // Coordenadas del movimiento:
+        const f1 = this.seleccionada.fila; // origen
+        const c1 = this.seleccionada.col;
+        const f2 = destinoObjeto.fila;     // destino
+        const c2 = destinoObjeto.col;
+        const fm = destinoObjeto.medio.fila; // ficha intermedia (la que se “salta”)
+        const cm = destinoObjeto.medio.col;
+
+        // El origen y la ficha intermedia se marcan como "eliminadas" visualmente
+        this.matriz[f1][c1] = 2;
+        this.matriz[fm][cm] = 2;
+
+        // La celda destino pasa a tener una ficha activa
+        this.matriz[f2][c2] = 1;
+
+        // Limpia selección y lista de posibles destinos
+        this.seleccionada = null;
+        this.destinosDisponibles = [];
+
+        // Redibuja el tablero para reflejar el nuevo estado
+        this.dibujar();
+
+        // Verifica si el jugador ganó (por ejemplo, queda solo una ficha)
+        this.verificarVictoria();
+
+        // Si ya no quedan movimientos posibles, finaliza el juego
+        if (!this.tieneMovimientosPosibles()) {
+            this.finDelJuego();
+        }
+    }
+
+    // === Método principal de dibujo del juego ===
+    dibujar() {
+        const ctx = this.ctx;
+
+        // Guarda el estado del contexto y dibuja el fondo del tablero
+        ctx.save();
+        ctx.drawImage(this.tablero, 0, 0, this.ancho, this.alto);
+        ctx.restore();
+
+        // Parámetros de las celdas
+        const celdas = 7;
+        const espacioX = this.areaW / celdas;
+        const espacioY = this.areaH / celdas;
+
+        // === Mostrar cronómetro ===
         const minutos = Math.floor(this.tiempoRestante / 60);
         const segundos = this.tiempoRestante % 60;
 
-        // Botón Reiniciar
+        // === Botón de Reiniciar ===
         const b = this.botonReiniciar;
         ctx.fillStyle = "#00b4d8";
         ctx.fillRect(b.x, b.y, b.w, b.h);
@@ -514,7 +532,7 @@ export class Juego {
         ctx.font = "20px Nunito";
         ctx.fillText("Reiniciar", b.x + 60, b.y + 22);
 
-        // Cronómetro
+        // === Dibujo del cronómetro en pantalla ===
         ctx.font = "28px Nunito";
         ctx.fillStyle = "white";
         ctx.strokeStyle = "black";
@@ -534,13 +552,14 @@ export class Juego {
         ctx.textBaseline = "middle";
         ctx.fillText("Como Jugar?", btn.x + btn.w / 2, btn.y + btn.h / 2);
 
-        // === Panel de Instrucciones (si está activo) ===
+        // === Panel emergente de instrucciones ===
         if (this.mostrarInstrucciones) {
             const panelX = btn.x;
             const panelY = btn.y + btn.h + 10;
             const panelW = 315;
             const panelH = 210;
 
+            // Fondo del panel con transparencia
             ctx.save();
             ctx.fillStyle = "rgba(0, 0, 0, 0.8)";
             ctx.strokeStyle = "white";
@@ -548,6 +567,7 @@ export class Juego {
             ctx.fillRect(panelX, panelY, panelW, panelH);
             ctx.strokeRect(panelX, panelY, panelW, panelH);
 
+            // Texto de las instrucciones
             const instrucciones = [
                 "- Seleccioná una insignia, hacela saltar",
                 "sobre otra adyacente hacia un espacio vacío",
@@ -555,44 +575,44 @@ export class Juego {
                 "- Seguí encadenando movimientos con",
                 "precisión.. ¡y convertite en el verdadero",
                 "ganador dejando solo una ficha",
-                "en el medio del tablero!"];
+                "en el medio del tablero!"
+            ];
 
             ctx.font = "15px Nunito";
             ctx.fillStyle = "white";
             ctx.textAlign = "left";
+
+            // Escribe cada línea con un espaciado vertical
             instrucciones.forEach((texto, i) => {
                 ctx.fillText(texto, panelX + 15, panelY + 30 + i * 25);
             });
+
             ctx.restore();
         }
 
-
-        // dibujar todas las celdas según valor
+        // === Dibuja las fichas del tablero ===
         for (let fila = 0; fila < celdas; fila++) {
             for (let col = 0; col < celdas; col++) {
                 const val = this.matriz[fila][col];
-                if (val === -1) continue; // fuera del tablero
+                if (val === -1) continue; // -1 = fuera del tablero
 
                 const x = this.areaX + col * espacioX + espacioX / 2 - this.tamañoFicha / 2;
                 const y = this.areaY + fila * espacioY + espacioY / 2 - this.tamañoFicha / 2;
 
-                // Si esta celda es el origen de la ficha que estoy arrastrando,
-                // mostramos la imagen "fichaEliminada" visualmente para no dejar un hueco.
-                if (this.dragging && this.seleccionada && this.seleccionada.fila === fila && this.seleccionada.col === col) {
+                // Si la ficha está siendo arrastrada, dibuja su “hueco eliminado”
+                if (this.dragging && this.seleccionada &&
+                    this.seleccionada.fila === fila && this.seleccionada.col === col) {
                     ctx.drawImage(this.fichaEliminada, x, y, this.tamañoFicha, this.tamañoFicha);
                     continue;
                 }
-                // destinos disponibles con animación de "latido y brillo"
-                if (this.destinosDisponibles.some(d => d.fila === fila && d.col === col)) {
-                    // tiempo global para animación
-                    const t = performance.now() / 1000; // segundos
-                    // ciclo de latido: entre 0 y 1 en un ritmo constante
-                    const pulso = (Math.sin(t * 2 * Math.PI / 3) + 1) / 2; // 3 seg por ciclo
 
-                    // escala y brillo basados en el pulso
-                    const escala = 1 + pulso * 0.1; // leve aumento 10%
-                    const brillo = 1 + pulso * 0.5; // brillo hasta 1.5x
-                    const alpha = 0.7 + pulso * 0.3; // leve respiración
+                // === Celdas de destino disponibles (con animación de brillo/pulso) ===
+                if (this.destinosDisponibles.some(d => d.fila === fila && d.col === col)) {
+                    const t = performance.now() / 1000; // tiempo en segundos
+                    const pulso = (Math.sin(t * 2 * Math.PI / 3) + 1) / 2; // ciclo de 3 segundos
+                    const escala = 1 + pulso * 0.1;
+                    const brillo = 1 + pulso * 0.5;
+                    const alpha = 0.7 + pulso * 0.3;
 
                     ctx.save();
                     ctx.filter = `brightness(${brillo})`;
@@ -608,35 +628,33 @@ export class Juego {
                         tamañoAnim,
                         tamañoAnim
                     );
-
                     ctx.restore();
                     continue;
                 }
 
-
-                // valores normales
+                // === Fichas normales ===
                 if (val === 1) {
-                    // Si el mouse está sobre esta celda, usamos la imagen hover
-                    if (this.celdaHover && this.celdaHover.fila === fila && this.celdaHover.col === col) {
+                    // Si el mouse está encima, usa imagen hover
+                    if (this.celdaHover &&
+                        this.celdaHover.fila === fila &&
+                        this.celdaHover.col === col) {
                         ctx.drawImage(this.fichaHover, x, y, this.tamañoFicha, this.tamañoFicha);
                     } else {
                         ctx.drawImage(this.ficha, x, y, this.tamañoFicha, this.tamañoFicha);
                     }
-                } else if (val === 0) {
-                    // vacío -> no dibujar
                 } else if (val === 2) {
+                    // Ficha eliminada (visualmente gris o apagada)
                     ctx.drawImage(this.fichaEliminada, x, y, this.tamañoFicha, this.tamañoFicha);
                 }
             }
         }
 
-        // si estamos arrastrando, dibujamos la ficha siguiendo al cursor (por encima)
+        // === Dibujo de la ficha que se arrastra ===
         if (this.dragging && this.seleccionada) {
-            // posición de la imagen centrada respecto dragPos (teniendo en cuenta offset)
             const drawX = this.dragPos.x + this.dragOffset.x - this.tamañoFicha / 2;
             const drawY = this.dragPos.y + this.dragOffset.y - this.tamañoFicha / 2;
 
-            // limitar dibujo al área jugable (opcionalmente ya limitado en mousemove)
+            // Limita su movimiento dentro del área jugable
             const minX = this.areaX - this.tamañoFicha / 2;
             const maxX = this.areaX + this.areaW - this.tamañoFicha / 2;
             const minY = this.areaY - this.tamañoFicha / 2;
@@ -645,11 +663,12 @@ export class Juego {
             const finalX = Math.max(minX, Math.min(maxX, drawX));
             const finalY = Math.max(minY, Math.min(maxY, drawY));
 
+            // Dibuja la ficha arrastrada sobre todas las demás
             ctx.drawImage(this.fichaSeleccionada, finalX, finalY, this.tamañoFicha, this.tamañoFicha);
         }
-        // --- Cartel de fin del juego ---
+
+        // === Cartel de fin del juego (pantalla final) ===
         if (this.juegoTerminado) {
-            const ctx = this.ctx;
             const centerX = this.ancho / 2;
             const centerY = this.alto / 2;
 
@@ -658,26 +677,28 @@ export class Juego {
             ctx.fillRect(0, 0, this.ancho, this.alto);
 
             ctx.fillStyle = "#fff";
-            ctx.font = "bold 46px Nunito";
             ctx.textAlign = "center";
-            ctx.font = "24px Nunito";
+
+            // Mensajes de fin
             if (this.mostrarCartelTiempo) {
+                ctx.font = "24px Nunito";
                 ctx.fillText("⏳ ¡Se acabó el tiempo!", centerX, centerY - 60);
                 ctx.fillText("Has perdido la partida.", centerX, centerY - 15);
             } else if (this.mostrarVictoria) {
-                ctx.fillText("Felicitaiones!", centerX, centerY - 60);
+                ctx.font = "24px Nunito";
+                ctx.fillText("¡Felicitaciones!", centerX, centerY - 60);
                 ctx.fillText("Has ganado la partida.", centerX, centerY - 15);
             } else {
+                ctx.font = "24px Nunito";
                 ctx.fillText("¡Te quedaste sin movimientos!", centerX, centerY - 60);
                 ctx.fillText("Has perdido la partida.", centerX, centerY - 15);
             }
 
-
-            // Botones
+            // === Botones del final ===
             if (this.botonesFin) {
                 const { reiniciar, menu } = this.botonesFin;
 
-                // Reintentar
+                // Botón "Jugar de nuevo"
                 ctx.fillStyle = "#00b4d8";
                 ctx.fillRect(reiniciar.x, reiniciar.y, reiniciar.w, reiniciar.h);
                 ctx.fillStyle = "#fff";
@@ -686,7 +707,7 @@ export class Juego {
                 ctx.textBaseline = "middle";
                 ctx.fillText("Jugar de nuevo", reiniciar.x + reiniciar.w / 2, reiniciar.y + reiniciar.h / 2);
 
-                // Menú
+                // Botón "Volver al menú"
                 ctx.fillStyle = "#6c757d";
                 ctx.fillRect(menu.x, menu.y, menu.w, menu.h);
                 ctx.fillStyle = "#fff";
@@ -695,7 +716,59 @@ export class Juego {
 
             ctx.restore();
         }
+    }
 
+    // === Inicia el temporizador del juego ===
+    iniciarTimer() {
+        this.intervaloTimer = setInterval(() => {
+            this.tiempoRestante--; // resta un segundo
+
+            // Si se acaba el tiempo, termina el juego
+            if (this.tiempoRestante <= 0) {
+                clearInterval(this.intervaloTimer);
+                this.mostrarPantallaFin("¡Se acabó el tiempo!");
+            }
+        }, 1000); // cada 1 segundo
+    }
+
+     // === Muestra la pantalla final (ganó o perdió) ===
+    mostrarPantallaFin(mensaje) {
+        // Si el temporizador sigue corriendo, se detiene
+        if (this.intervaloTimer) {
+            clearInterval(this.intervaloTimer);
+            this.intervaloTimer = null;
+        }
+
+        // Marca que el juego terminó
+        this.juegoTerminado = true;
+        this.mensajeFin = mensaje || "Fin del juego";
+
+        // Bandera para saber si el motivo del fin fue el tiempo
+        this.mostrarCartelTiempo = String(mensaje).toLowerCase().includes("tiempo");
+
+        // Calcula la posición central para colocar los botones del final
+        const centerX = this.ancho / 2;
+        const centerY = this.alto / 2;
+        const botonW = 220;
+        const botonH = 60;
+
+        // Define las coordenadas de los botones de la pantalla final
+        this.botonesFin = {
+            reiniciar: { x: centerX - botonW - 20, y: centerY + 60, w: botonW, h: botonH },
+            menu: { x: centerX + 20, y: centerY + 60, w: botonW, h: botonH },
+        };
+
+        // Quita los listeners del juego (para que el jugador no mueva fichas)
+        try {
+            this.canvas.removeEventListener("mousedown", this._onMouseDown);
+            this.canvas.removeEventListener("mousemove", this._onMouseMove);
+            window.removeEventListener("mouseup", this._onMouseUp);
+        } catch (err) {
+            // En caso de que algún listener ya esté eliminado, evita errores
+        }
+
+        // Redibuja todo para mostrar el cartel final inmediatamente
+        this.dibujar();
     }
 
 }

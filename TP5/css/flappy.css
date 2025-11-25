@@ -1,0 +1,492 @@
+#game-container {
+  width: 1300px;
+  height: 700px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ==================== OVERLAY DE INICIO ==================== */
+.start-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  z-index: 10000;
+  background-color: rgba(88, 85, 85, 0.85);
+}
+
+.start-overlay.active {
+  pointer-events: auto; 
+}
+
+.start-btn {
+  padding: 15px 15px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #ffffff;
+  background: #313131;
+  border: 3px solid #fff;
+  border-radius: 20px;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  font-family: 'Nunito', sans-serif;
+}
+
+.start-btn:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+  background: #444444;
+}
+
+.start-btn:active {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.start-overlay.hidden {
+  display: none;
+}
+
+/* ==================== ESTADÍSTICAS DEL JUEGO ==================== */
+.game-stats {
+  position: absolute;
+  top: 20px;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  z-index: 9998;
+  background: rgba(118, 226, 96);
+  padding: 15px 30px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.game-stats.hidden {
+  display: none;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-label {
+  font-family: 'Nunito', sans-serif;
+  font-size: 12px;
+  color: black;
+  text-transform: uppercase;
+}
+
+.stat-value {
+  font-family: 'Nunito', sans-serif;
+  font-size: 24px;
+  color: black;
+  text-shadow: rgba(255, 255, 255);
+}
+
+/* Animación cuando se pierde una vida */
+.vida-danio {
+  animation: vidaPop 0.6s ease-out;
+  color: red !important;
+}
+
+@keyframes vidaPop {
+  0%   { transform: scale(1); }
+  20%  { transform: scale(1.4); }
+  50%  { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+
+
+/* ==================== OVERLAY DE GAME OVER ==================== */
+.gameover-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(88, 85, 85, 0.85);
+  z-index: 10001;
+  transition: opacity 0.3s ease-out;
+}
+
+.gameover-overlay.hidden {
+  display: none;
+}
+
+.gameover-content {
+  text-align: center;
+  animation: slideDown 0.5s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.gameover-title {
+  font-family: 'Nunito', sans-serif;
+  font-size: 48px;
+  color: #ff0000;
+  text-shadow:rgba(255, 68, 68, 0.5);
+  margin-bottom: 30px;
+}
+
+.game-results {
+  padding: 20px 50px;
+  margin-bottom: 30px;
+  display: flex;
+  gap: 40px;
+}
+
+.result-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.result-label {
+  font-family: 'Nunito', sans-serif;
+  font-size: 16px;
+  color: #ffffff;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.result-value {
+  font-family: 'Nunito', sans-serif;
+  font-size: 36px;
+  color: #ffffff;
+}
+
+.restart-btn {
+  padding: 15px 15px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #ffffff;
+  background: #313131;
+  border: 3px solid #fff;
+  border-radius: 20px;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  font-family: 'Nunito', sans-serif;
+}
+
+.restart-btn:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+  background: #444444;
+}
+
+.restart-btn:active {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* ==================== Avatar (JUGADOR) ==================== */
+#avatar {
+  position: absolute;
+  left: 100px;
+  top: 300px;
+  width: 75px;
+  height: 50px;
+  background-image: url('../img/bird.png');
+  background-size: 225px 50px;
+  background-repeat: no-repeat;
+  animation: avatar-fly 0.6s steps(3) infinite;
+  z-index: 9999;
+  transition: top 0.1s ease-out, transform 0.2s ease-out;
+  filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.5));
+}
+
+@keyframes avatar-fly {
+  0% { background-position: 0 0; }
+  100% { background-position: -225px 0; }
+}
+
+/* Efecto Bernoulli: rotación cuando se eleva o cae */
+.avatar-rising {
+  transform: rotate(-15deg);
+}
+
+.avatar-falling {
+  transform: rotate(10deg);
+}
+
+/* ==================== EXPLOSIÓN ==================== */
+#explosion {
+  position: absolute;
+  left: 100px;
+  top: 300px;
+  width: 75px;
+  height: 75px;
+  z-index: 10000;
+  display: none;
+  pointer-events: none;
+}
+
+#explosion.active {
+  display: block;
+}
+
+/* ==================== TUBOS ==================== */
+#tubos-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 85;
+  pointer-events: none;
+}
+
+.tubo {
+  position: absolute;
+  width: 60px;
+  background-color: #444744;
+  box-shadow: inset -5px 0 10px rgba(0,0,0,0.3);
+}
+
+.tubo-top {
+  top: 0;
+  border-bottom:30px solid #313131;
+}
+
+.tubo-bottom {
+  bottom: 0;
+  border-top: 30px solid #313131;
+}
+
+/* ==================== MANZANAS BONUS ==================== */
+#manzanas-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 80;
+  pointer-events: none;
+}
+
+.manzana {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background-image: url('../img/manzana.png');
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 100;
+  pointer-events: none;
+  /* Filtro para darle un tono diferente y distinguirlo */
+  filter: hue-rotate(180deg) brightness(1.2);
+}
+
+.manzana.emerging {
+  animation: manzana-emerge 2s ease-out forwards;
+}
+
+@keyframes manzana-emerge {
+  0% {
+    transform: translateY(40px);
+    opacity: 0;
+    z-index: 80;
+  }
+  50% {
+    opacity: 1;
+    z-index: 80;
+  }
+  51% {
+    z-index: 90;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+    z-index: 100;
+  }
+}
+
+/* ==================== NOTIFICACIÓN DE PUNTOS ==================== */
+.points-notification {
+  position: absolute;
+  display: none;
+  font-family: 'Nunito', sans-serif;
+  font-size: 28px;
+  color: black;
+  z-index: 10001;
+  pointer-events: none;
+  animation: points-pop 1s ease-out forwards;
+}
+
+.points-notification.show {
+  display: block;
+}
+
+@keyframes points-pop {
+  0% {
+    transform: scale(0.5) translateY(0);
+    opacity: 0;
+  }
+  20% {
+    transform: scale(1.2) translateY(-10px);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) translateY(-30px);
+    opacity: 0;
+  }
+}
+
+/* ==================== PARALLAX LAYERS ==================== */
+.layer {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1300px;
+  height: 700px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* El "strip" contiene las 2 copias */
+.layer .strip {
+  position: absolute;
+  width: 2600px;   /* 2 × 1300px */
+  height: 100%;
+  display: flex;
+  transform: translate3d(0,0,0);
+  will-change: transform;
+}
+
+/* Cada copia */
+.layer .strip .img {
+  width: 1300px;
+  height: 700px;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: center;
+}
+
+/* Asignación de imágenes */
+.layer-1 .img { background-image: url('../img/foto1.png'); }
+.layer-2 .img { background-image: url('../img/foto2.png'); }
+.layer-3 .img { background-image: url('../img/foto3.png'); }
+.layer-4 .img { background-image: url('../img/foto4.png'); }
+.layer-5 .img { background-image: url('../img/foto5.png'); }
+.layer-6 .img { background-image: url('../img/foto6.png'); }
+
+/* Parallax */
+.layer-1 .strip { animation: slide 10s linear infinite; }
+.layer-2 .strip { animation: slide 15s linear infinite; }
+.layer-3 .strip { animation: slide 20s linear infinite; }
+.layer-4 .strip { animation: slide 25s linear infinite; }
+.layer-5 .strip { animation: slide 30s linear infinite; }
+.layer-6 .strip { animation: slide 35s linear infinite; }
+
+/* Animación que mueve exactamente una copia (1300px) */
+@keyframes slide {
+  from { transform: translate3d(0,0,0); }
+  to   { transform: translate3d(-1300px,0,0); }
+}
+
+
+/* ==================== OVERLAY DE ESTADO TEMPORAL ==================== */
+.estado-temporal {
+    position: fixed;
+    top: 0;
+    left: 0;           
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10001;
+    animation: fadeIn 0.3s ease-in;
+}
+
+
+h1 {
+  animation: vidaPop 0.6s ease-out;
+  color: red !important;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-80px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.7;
+        transform: scale(1.05);
+    }
+}
+
+/* ==================== DISPLAY DE VIDA EXTRA ==================== */
+.vida-extra-display {
+  position: absolute;
+  top: 105px;
+  align-items: center;
+  font-family: 'Nunito', sans-serif;
+  font-size: 24px;
+  color: green;
+  z-index: 9998;
+  pointer-events: none;
+  background: rgba(118, 226, 96, 0.7);
+  padding: 15px 30px;
+  border-radius: 10px;
+  border: 2px solid #42a508;
+  animation: pulse-vida-extra 1s infinite;
+}
+
+.vida-extra-display.hidden {
+  display: none;
+}
+
+.vida-extra-display.active {
+  display: block;
+}
+
+@keyframes pulse-vida-extra {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+  
+
+
+  
